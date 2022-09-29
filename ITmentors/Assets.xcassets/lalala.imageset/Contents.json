@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "Снимок экрана 2022-09-27 в 18.41.45.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
