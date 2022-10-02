@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,16 @@
 		17174B4428E5754700C7BD3C /* DetailedMentorModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B3E28E5754600C7BD3C /* DetailedMentorModels.swift */; };
 		17174B4528E5754700C7BD3C /* DetailedMentorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B3F28E5754600C7BD3C /* DetailedMentorViewController.swift */; };
 		17174B4628E5754700C7BD3C /* DetailedMentorInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B4028E5754600C7BD3C /* DetailedMentorInteractor.swift */; };
+		17174B4E28E6D93300C7BD3C /* BecomeMentorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B4828E6D93300C7BD3C /* BecomeMentorPresenter.swift */; };
+		17174B4F28E6D93300C7BD3C /* BecomeMentorWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B4928E6D93300C7BD3C /* BecomeMentorWorker.swift */; };
+		17174B5028E6D93300C7BD3C /* BecomeMentorRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B4A28E6D93300C7BD3C /* BecomeMentorRouter.swift */; };
+		17174B5128E6D93300C7BD3C /* BecomeMentorModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B4B28E6D93300C7BD3C /* BecomeMentorModels.swift */; };
+		17174B5228E6D93300C7BD3C /* BecomeMentorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B4C28E6D93300C7BD3C /* BecomeMentorViewController.swift */; };
+		17174B5328E6D93300C7BD3C /* BecomeMentorInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B4D28E6D93300C7BD3C /* BecomeMentorInteractor.swift */; };
+		17174B5628E6F55E00C7BD3C /* UIViewController + endEditing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B5528E6F55E00C7BD3C /* UIViewController + endEditing.swift */; };
+		17B49C5428E8176800AFC68E /* SelectLanguagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B49C5328E8176800AFC68E /* SelectLanguagesViewController.swift */; };
+		17B49C5628E8183900AFC68E /* LanguageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B49C5528E8183900AFC68E /* LanguageTableViewCell.swift */; };
+		17B49C5828E83C9D00AFC68E /* SelectLanguageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B49C5728E83C9D00AFC68E /* SelectLanguageViewModel.swift */; };
 		17CD8DCA28E4735900F0D1EE /* MentorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CD8DC928E4735900F0D1EE /* MentorCell.swift */; };
 		17CD8DCC28E47A5F00F0D1EE /* LanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CD8DCB28E47A5F00F0D1EE /* LanguageCell.swift */; };
 		17E6798528E3766B00B140B5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17E6798328E3766B00B140B5 /* Main.storyboard */; };
@@ -49,6 +59,16 @@
 		17174B3E28E5754600C7BD3C /* DetailedMentorModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedMentorModels.swift; sourceTree = "<group>"; };
 		17174B3F28E5754600C7BD3C /* DetailedMentorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedMentorViewController.swift; sourceTree = "<group>"; };
 		17174B4028E5754600C7BD3C /* DetailedMentorInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedMentorInteractor.swift; sourceTree = "<group>"; };
+		17174B4828E6D93300C7BD3C /* BecomeMentorPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BecomeMentorPresenter.swift; sourceTree = "<group>"; };
+		17174B4928E6D93300C7BD3C /* BecomeMentorWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BecomeMentorWorker.swift; sourceTree = "<group>"; };
+		17174B4A28E6D93300C7BD3C /* BecomeMentorRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BecomeMentorRouter.swift; sourceTree = "<group>"; };
+		17174B4B28E6D93300C7BD3C /* BecomeMentorModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BecomeMentorModels.swift; sourceTree = "<group>"; };
+		17174B4C28E6D93300C7BD3C /* BecomeMentorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BecomeMentorViewController.swift; sourceTree = "<group>"; };
+		17174B4D28E6D93300C7BD3C /* BecomeMentorInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BecomeMentorInteractor.swift; sourceTree = "<group>"; };
+		17174B5528E6F55E00C7BD3C /* UIViewController + endEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + endEditing.swift"; sourceTree = "<group>"; };
+		17B49C5328E8176800AFC68E /* SelectLanguagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLanguagesViewController.swift; sourceTree = "<group>"; };
+		17B49C5528E8183900AFC68E /* LanguageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageTableViewCell.swift; sourceTree = "<group>"; };
+		17B49C5728E83C9D00AFC68E /* SelectLanguageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLanguageViewModel.swift; sourceTree = "<group>"; };
 		17CD8DC928E4735900F0D1EE /* MentorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentorCell.swift; sourceTree = "<group>"; };
 		17CD8DCB28E47A5F00F0D1EE /* LanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageCell.swift; sourceTree = "<group>"; };
 		17E6797A28E3766B00B140B5 /* ITmentors.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ITmentors.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,7 +110,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		17174B3A28E5751300C7BD3C /* DetailedMentor */ = {
+		17174B3A28E5751300C7BD3C /* DetailedMentorScene */ = {
 			isa = PBXGroup;
 			children = (
 				17174B3F28E5754600C7BD3C /* DetailedMentorViewController.swift */,
@@ -100,10 +120,57 @@
 				17174B3D28E5754600C7BD3C /* DetailedMentorRouter.swift */,
 				17174B3E28E5754600C7BD3C /* DetailedMentorModels.swift */,
 			);
-			path = DetailedMentor;
+			path = DetailedMentorScene;
 			sourceTree = "<group>";
 		};
-		17CD8DC828E4732A00F0D1EE /* MentorsListScreen */ = {
+		17174B4728E6D91D00C7BD3C /* BecomeMentorScene */ = {
+			isa = PBXGroup;
+			children = (
+				17B49C5928E83CB400AFC68E /* SelectLanguageScene */,
+				17174B4C28E6D93300C7BD3C /* BecomeMentorViewController.swift */,
+				17174B4D28E6D93300C7BD3C /* BecomeMentorInteractor.swift */,
+				17174B4828E6D93300C7BD3C /* BecomeMentorPresenter.swift */,
+				17174B4928E6D93300C7BD3C /* BecomeMentorWorker.swift */,
+				17174B4A28E6D93300C7BD3C /* BecomeMentorRouter.swift */,
+				17174B4B28E6D93300C7BD3C /* BecomeMentorModels.swift */,
+			);
+			path = BecomeMentorScene;
+			sourceTree = "<group>";
+		};
+		17174B5428E6D94400C7BD3C /* Cells & models */ = {
+			isa = PBXGroup;
+			children = (
+				17CD8DC928E4735900F0D1EE /* MentorCell.swift */,
+				17174B3828E566BA00C7BD3C /* LanguageModel.swift */,
+				17CD8DCB28E47A5F00F0D1EE /* LanguageCell.swift */,
+			);
+			path = "Cells & models";
+			sourceTree = "<group>";
+		};
+		17B49C5228E8172100AFC68E /* ProfileScene */ = {
+			isa = PBXGroup;
+			children = (
+				17E679D728E379E400B140B5 /* ProfileScreenViewController.swift */,
+				17E679D828E379E400B140B5 /* ProfileScreenInteractor.swift */,
+				17E679D328E379E400B140B5 /* ProfileScreenPresenter.swift */,
+				17E679D428E379E400B140B5 /* ProfileScreenWorker.swift */,
+				17E679D528E379E400B140B5 /* ProfileScreenRouter.swift */,
+				17E679D628E379E400B140B5 /* ProfileScreenModels.swift */,
+			);
+			path = ProfileScene;
+			sourceTree = "<group>";
+		};
+		17B49C5928E83CB400AFC68E /* SelectLanguageScene */ = {
+			isa = PBXGroup;
+			children = (
+				17B49C5328E8176800AFC68E /* SelectLanguagesViewController.swift */,
+				17B49C5728E83C9D00AFC68E /* SelectLanguageViewModel.swift */,
+				17B49C5528E8183900AFC68E /* LanguageTableViewCell.swift */,
+			);
+			path = SelectLanguageScene;
+			sourceTree = "<group>";
+		};
+		17CD8DC828E4732A00F0D1EE /* MentorsListScene */ = {
 			isa = PBXGroup;
 			children = (
 				17E679C928E379B200B140B5 /* MentorsScreenViewController.swift */,
@@ -113,7 +180,7 @@
 				17E679C728E379B200B140B5 /* MentorsScreenRouter.swift */,
 				17E679C828E379B200B140B5 /* MentorsScreenModels.swift */,
 			);
-			path = MentorsListScreen;
+			path = MentorsListScene;
 			sourceTree = "<group>";
 		};
 		17E6797128E3766B00B140B5 = {
@@ -164,6 +231,7 @@
 				17E679C028E3796D00B140B5 /* UIColor + hex.swift */,
 				17E679C228E3798200B140B5 /* AppColors.swift */,
 				17174B3628E4DF4700C7BD3C /* UIColor + gradient.swift */,
+				17174B5528E6F55E00C7BD3C /* UIViewController + endEditing.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -180,11 +248,9 @@
 		17E679D128E379C000B140B5 /* Mentors */ = {
 			isa = PBXGroup;
 			children = (
-				17CD8DC828E4732A00F0D1EE /* MentorsListScreen */,
-				17174B3A28E5751300C7BD3C /* DetailedMentor */,
-				17CD8DC928E4735900F0D1EE /* MentorCell.swift */,
-				17CD8DCB28E47A5F00F0D1EE /* LanguageCell.swift */,
-				17174B3828E566BA00C7BD3C /* LanguageModel.swift */,
+				17CD8DC828E4732A00F0D1EE /* MentorsListScene */,
+				17174B3A28E5751300C7BD3C /* DetailedMentorScene */,
+				17174B5428E6D94400C7BD3C /* Cells & models */,
 			);
 			path = Mentors;
 			sourceTree = "<group>";
@@ -192,12 +258,8 @@
 		17E679D228E379CB00B140B5 /* Profiles */ = {
 			isa = PBXGroup;
 			children = (
-				17E679D728E379E400B140B5 /* ProfileScreenViewController.swift */,
-				17E679D828E379E400B140B5 /* ProfileScreenInteractor.swift */,
-				17E679D328E379E400B140B5 /* ProfileScreenPresenter.swift */,
-				17E679D428E379E400B140B5 /* ProfileScreenWorker.swift */,
-				17E679D528E379E400B140B5 /* ProfileScreenRouter.swift */,
-				17E679D628E379E400B140B5 /* ProfileScreenModels.swift */,
+				17174B4728E6D91D00C7BD3C /* BecomeMentorScene */,
+				17B49C5228E8172100AFC68E /* ProfileScene */,
 			);
 			path = Profiles;
 			sourceTree = "<group>";
@@ -258,7 +320,7 @@
 				};
 			};
 			buildConfigurationList = 17E6797528E3766B00B140B5 /* Build configuration list for PBXProject "ITmentors" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -337,21 +399,31 @@
 			files = (
 				17CD8DCA28E4735900F0D1EE /* MentorCell.swift in Sources */,
 				17E679DB28E379E400B140B5 /* ProfileScreenRouter.swift in Sources */,
+				17174B4E28E6D93300C7BD3C /* BecomeMentorPresenter.swift in Sources */,
 				17E679D928E379E400B140B5 /* ProfileScreenPresenter.swift in Sources */,
 				17E679BE28E3793F00B140B5 /* TabBarController.swift in Sources */,
 				17E679DA28E379E400B140B5 /* ProfileScreenWorker.swift in Sources */,
 				17E679DD28E379E400B140B5 /* ProfileScreenViewController.swift in Sources */,
 				17E679CF28E379B200B140B5 /* MentorsScreenViewController.swift in Sources */,
+				17174B5128E6D93300C7BD3C /* BecomeMentorModels.swift in Sources */,
+				17B49C5428E8176800AFC68E /* SelectLanguagesViewController.swift in Sources */,
 				17E679BC28E3792A00B140B5 /* AppDelegate.swift in Sources */,
 				17E679CC28E379B200B140B5 /* MentorsScreenWorker.swift in Sources */,
 				17174B4428E5754700C7BD3C /* DetailedMentorModels.swift in Sources */,
 				17E679DE28E379E400B140B5 /* ProfileScreenInteractor.swift in Sources */,
+				17174B4F28E6D93300C7BD3C /* BecomeMentorWorker.swift in Sources */,
 				17E679CE28E379B200B140B5 /* MentorsScreenModels.swift in Sources */,
 				17174B4228E5754700C7BD3C /* DetailedMentorWorker.swift in Sources */,
+				17174B5328E6D93300C7BD3C /* BecomeMentorInteractor.swift in Sources */,
 				17CD8DCC28E47A5F00F0D1EE /* LanguageCell.swift in Sources */,
+				17B49C5828E83C9D00AFC68E /* SelectLanguageViewModel.swift in Sources */,
+				17174B5028E6D93300C7BD3C /* BecomeMentorRouter.swift in Sources */,
 				17E679BA28E3790D00B140B5 /* SceneDelagate.swift in Sources */,
+				17B49C5628E8183900AFC68E /* LanguageTableViewCell.swift in Sources */,
 				17174B4128E5754700C7BD3C /* DetailedMentorPresenter.swift in Sources */,
+				17174B5228E6D93300C7BD3C /* BecomeMentorViewController.swift in Sources */,
 				17174B4328E5754700C7BD3C /* DetailedMentorRouter.swift in Sources */,
+				17174B5628E6F55E00C7BD3C /* UIViewController + endEditing.swift in Sources */,
 				17174B3728E4DF4700C7BD3C /* UIColor + gradient.swift in Sources */,
 				17E679D028E379B200B140B5 /* MentorsScreenInteractor.swift in Sources */,
 				17174B4628E5754700C7BD3C /* DetailedMentorInteractor.swift in Sources */,
@@ -513,6 +585,7 @@
 				DEVELOPMENT_TEAM = M85PDP6HKH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ITmentors/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = gdfgdfg;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -543,6 +616,7 @@
 				DEVELOPMENT_TEAM = M85PDP6HKH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ITmentors/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = gdfgdfg;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

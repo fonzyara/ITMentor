@@ -54,7 +54,7 @@ extension TabBarController{
                 let feedViewController = MentorsScreenViewController()
                 return self.wrappedInNavigationController(with: feedViewController, title: $0.title)
             case .profile:
-                let profileViewController = ProfileScreenViewController()
+                let profileViewController = BecomeMentorViewController()
                 return self.wrappedInNavigationController(with: profileViewController, title: $0.title)
             }
         }
@@ -70,9 +70,23 @@ extension TabBarController{
         let navController = UINavigationController(rootViewController: with)
         navController.view.backgroundColor = .AppPalette.elementsColor
         navController.navigationBar.topItem?.title = title as? String
-        UINavigationBar.appearance().tintColor = .white
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25) ]
+        
+        
+        UITabBar.appearance().isTranslucent = false
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithTransparentBackground()
+        navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25) ]
+        UINavigationBar.appearance().standardAppearance = navigationBarAppearance
         UINavigationBar.appearance().isTranslucent = false
+        
+    
+        
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithTransparentBackground()
+        tabBarAppearance.backgroundColor = .AppPalette.elementsColor
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().tintColor = .AppPalette.secondElementColor
+        
         return navController
     }
     

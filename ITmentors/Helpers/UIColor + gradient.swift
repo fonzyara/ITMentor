@@ -25,8 +25,7 @@ class Gradientor{
         case .yellow:
             return [UIColor(hex: 0xfffc00).cgColor,
              UIColor(hex: 0xffffff).cgColor]
-        case .purple:
-            
+        case .purple:   
             return [UIColor(hex: 0x654ae3).cgColor,
              UIColor(hex: 0xeaafc8).cgColor]
         default:
