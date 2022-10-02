@@ -51,14 +51,20 @@ class SelectLanguagesViewController: UIViewController {
         let b = UIButton()
         b.backgroundColor = .blue
         b.addTarget(self, action: #selector(returnArrayOfLanguagesToPreviousScreen), for: .touchUpInside)
+        b.setTitle("Подтвердить", for: .normal)
+        b.layer.cornerRadius = 10
         
       return b
     }()
     
     @objc func returnArrayOfLanguagesToPreviousScreen(){
-        dismiss(animated: true) { [viewModel] in
+        print(123)
+        navigationController?.viewControllers.removeLast()
+        
+//        dismiss(animated: true) { [viewModel] in
+//            print(1234)
             self.returnArrayOfLanguagesToPreviousScreenDelegate?.getArray(array: viewModel?.arrayOfSelectedLanguages ?? [])
-        }
+        
     }
 }
 
@@ -68,16 +74,24 @@ extension SelectLanguagesViewController{
     func setConstraints(){
         view.addSubview(tableView)
         view.addSubview(label)
-
+        view.addSubview(confirmButton)
         tableView.snp.makeConstraints { make in
-            make.bottom.right.left.equalToSuperview()
+            make.right.left.equalToSuperview()
             make.top.equalTo(label.snp.bottom).offset(15)
+            make.bottom.equalToSuperview().offset(-150)
+
         }
         
         label.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(5)
             make.right.equalToSuperview().offset(-15)
             make.top.equalToSuperview().offset(7)
+        }
+        confirmButton.snp.makeConstraints { make in
+            make.top.equalTo(tableView.snp.bottom).offset(30)
+            make.width.equalToSuperview().multipliedBy(0.7)
+            make.height.equalTo(40)
+            make.centerX.equalToSuperview()
         }
     }
 }
@@ -91,7 +105,7 @@ extension SelectLanguagesViewController: UITableViewDelegate, UITableViewDataSou
 //        tableView.cellForRow(at: indexPath.row)?.isSelected
         if tableView.cellForRow(at: indexPath)?.backgroundColor == .AppPalette.elementsColor {
             tableView.cellForRow(at: indexPath)?.backgroundColor = .AppPalette.secondElementColor
-            
+            viewModel?.appendToArray(cellIndexPathRow: indexPath.row)
         }
         else if tableView.cellForRow(at: indexPath)?.backgroundColor == .AppPalette.secondElementColor {
             tableView.cellForRow(at: indexPath)?.backgroundColor = .AppPalette.elementsColor

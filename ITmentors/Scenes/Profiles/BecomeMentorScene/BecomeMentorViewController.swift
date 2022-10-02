@@ -19,7 +19,7 @@ protocol BecomeMentorDisplayLogic: AnyObject {
 class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UINavigationControllerDelegate {
 
     var imagePicker = UIImagePickerController()
-
+    var arrayOfLanguages: [Languages] = []
 
     var interactor: BecomeMentorBusinessLogic?
     var router: (NSObjectProtocol & BecomeMentorRoutingLogic & BecomeMentorDataPassing)?
@@ -46,15 +46,12 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let selectLanguagesVC = SelectLanguagesViewController()
-//        selectLanguagesVC.de
-        router?.navigateToSomewhere(source: self, destination: selectLanguagesVC)
+//        let selectLanguagesVC = SelectLanguagesViewController()
+//
+//        router?.navigateToSomewhere(source: self, destination: selectLanguagesVC)
     }
 
     override func viewDidLayoutSubviews(){
-//        scrollView.delegate = self
-//        scrollView.contentSize = CGSize(width: scrollView.frame.size.frame.size.width , height: UIViewHeader.frame.size.height + lblName.frame.size.height + tableView.frame.size.height + btnRegisteredCourses.frame.size.height)
-//        scrollView.contentSize = CGSize(width:self.view.frame.size.width, height: 1000)
         setConstraints()
     }
     // MARK: Do something
@@ -139,7 +136,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
     }()
     let messageLink: UITextField = {
         var textField = UITextField()
-        textField.text = "Например: https://t.me/escapin_closure"
+        textField.text = "Например: https://t.me/escaping_closure"
         textField.backgroundColor = UIColor.AppPalette.secondElementColor
         textField.textColor = .lightGray
         textField.font = UIFont.systemFont(ofSize: 15)
@@ -217,7 +214,19 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         b.addTarget(self, action: #selector(confirm), for: .touchUpInside)
        return b
     }()
-
+    let selectLanguagesButton: UIButton = {
+        let b = UIButton()
+        b.backgroundColor = .blue
+        b.setTitle("Выбрать языки программирования", for: .normal)
+        b.addTarget(self, action: #selector(selectLanguagelTransition), for: .touchUpInside)
+        b.layer.cornerRadius = 10
+      return b
+    }()
+    @objc func selectLanguagelTransition(){
+        let selectLanguagesVC = SelectLanguagesViewController()
+        selectLanguagesVC.returnArrayOfLanguagesToPreviousScreenDelegate = self
+        router?.navigateToSomewhere(source: self, destination: selectLanguagesVC)
+    }
     @objc func confirm(){
 //        guard let photoData = selectedImageView.image?.pngData() else {return}
 //        guard let shortDiscriptionn = shortDiscription.text, shortDiscription.text != "", shortDiscription.text != "Например: Senior IOS dev"  else {return}
@@ -262,7 +271,7 @@ extension BecomeMentorViewController{
         scrollView.addSubview(discriptionLabel)
         scrollView.addSubview(messageLink)
         scrollView.addSubview(messageLinkLabel)
-
+        scrollView.addSubview(selectLanguagesButton)
 
         scrollView.snp.makeConstraints { make in
             make.top.right.left.bottom.equalToSuperview()
@@ -327,7 +336,13 @@ extension BecomeMentorViewController{
             make.height.equalTo(40)
             make.top.equalTo(messageLinkLabel.snp.bottom).offset(7)
         }
-
+        
+        selectLanguagesButton.snp.makeConstraints { make in
+            make.top.equalTo(messageLink.snp.bottom).offset(15)
+            make.width.equalTo(itemsWidth)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(40)
+        }
     }
 }
 //MARK: - ImagePickerdelegate
@@ -405,7 +420,7 @@ extension BecomeMentorViewController: UITextFieldDelegate{
                 textField.text = ""
             }
         case messageLink:
-            if textField.text == "Например: https://t.me/escapin_closure"{
+            if textField.text == "Например: https://t.me/escaping_closure"{
                 textField.text = ""
             }
         case name:
@@ -420,9 +435,7 @@ extension BecomeMentorViewController: UITextFieldDelegate{
 
 extension BecomeMentorViewController: ReturnArrayOfLanguagesToPreviousScreenProtocol{
     func getArray(array: [Languages]) {
-        print("lalala")
+        arrayOfLanguages = array
+        print(arrayOfLanguages)
     }
-    
-
-  
 }

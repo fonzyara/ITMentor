@@ -26,7 +26,10 @@ class  SelectLanguagesViewModel: SelectLanguagesViewModelProtocol {
 
     }
     func removeFromArray(cellIndexPathRow: Int){
-        for i in 0...arrayOfSelectedLanguages.count{
+        var number = 0
+        if arrayOfSelectedLanguages.count >= 1 {number = 1}
+        for i in 0...arrayOfSelectedLanguages.count - number {
+//            print(arrayOfSelectedLanguages)
             let elementWeNeedDelete = arrayOfAllLanguages[cellIndexPathRow]
             let elementWeCheck = arrayOfSelectedLanguages[i]
             if elementWeNeedDelete == elementWeCheck{

@@ -32,6 +32,8 @@ class MentorsScreenInteractor: MentorsScreenBusinessLogic, MentorsScreenDataStor
         worker = MentorsScreenWorker()
         worker?.doSomeWork()
         
+        
+        //fake data
         var array: [MentorCellModel] = []
         let lala: MentorCellModel = MentorCellModel(name: "Vladimir", discription: "Помогаю со входом в IOS разработку. Пишите в тг", shortDiscription: "Senior IOS dev =(", imageData: UIImage(named: "myPhoto")?.pngData(), languages: [.swift, .ruby, .cPlusPlus, .js, .php, .python], messageLink: "https://t.me/escaping_closure")
         array.append(lala)
