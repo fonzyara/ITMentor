@@ -97,3 +97,11 @@ extension LanguageCollectionViewCell{
         
     }
 }
+extension UIView {
+    func applyShadowOnView() {
+        layer.shadowColor = UIColor.orange.cgColor
+        layer.shadowOpacity = 1
+        layer.shadowOffset = .zero
+        layer.shadowRadius = 5
+    }
+}

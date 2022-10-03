@@ -47,6 +47,11 @@
 		17E679DC28E379E400B140B5 /* ProfileScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E679D628E379E400B140B5 /* ProfileScreenModels.swift */; };
 		17E679DD28E379E400B140B5 /* ProfileScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E679D728E379E400B140B5 /* ProfileScreenViewController.swift */; };
 		17E679DE28E379E400B140B5 /* ProfileScreenInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E679D828E379E400B140B5 /* ProfileScreenInteractor.swift */; };
+		17F5A95528EB2EAD002546EF /* MentorListConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5A95428EB2EAC002546EF /* MentorListConfigurator.swift */; };
+		17F5A95728EB3047002546EF /* DetailedMentorConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5A95628EB3047002546EF /* DetailedMentorConfigurator.swift */; };
+		17F5A95928EB311D002546EF /* BecomeMentorConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5A95828EB311D002546EF /* BecomeMentorConfigurator.swift */; };
+		17F5A95B28EB318C002546EF /* ProfileScreenConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5A95A28EB318C002546EF /* ProfileScreenConfigurator.swift */; };
+		17F5A95D28EB3F43002546EF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 17F5A95C28EB3F43002546EF /* GoogleService-Info.plist */; };
 		715474AF4F52CE8845735198 /* Pods_ITmentors.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3EEEBD1368A37F2A6EDBA78 /* Pods_ITmentors.framework */; };
 /* End PBXBuildFile section */
 
@@ -93,6 +98,11 @@
 		17E679D628E379E400B140B5 /* ProfileScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenModels.swift; sourceTree = "<group>"; };
 		17E679D728E379E400B140B5 /* ProfileScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenViewController.swift; sourceTree = "<group>"; };
 		17E679D828E379E400B140B5 /* ProfileScreenInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenInteractor.swift; sourceTree = "<group>"; };
+		17F5A95428EB2EAC002546EF /* MentorListConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentorListConfigurator.swift; sourceTree = "<group>"; };
+		17F5A95628EB3047002546EF /* DetailedMentorConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedMentorConfigurator.swift; sourceTree = "<group>"; };
+		17F5A95828EB311D002546EF /* BecomeMentorConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BecomeMentorConfigurator.swift; sourceTree = "<group>"; };
+		17F5A95A28EB318C002546EF /* ProfileScreenConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenConfigurator.swift; sourceTree = "<group>"; };
+		17F5A95C28EB3F43002546EF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6E26E4E6C33EDF6B072D6DA1 /* Pods-ITmentors.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ITmentors.debug.xcconfig"; path = "Target Support Files/Pods-ITmentors/Pods-ITmentors.debug.xcconfig"; sourceTree = "<group>"; };
 		B3EEEBD1368A37F2A6EDBA78 /* Pods_ITmentors.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ITmentors.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F447410171C934258E4BA426 /* Pods-ITmentors.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ITmentors.release.xcconfig"; path = "Target Support Files/Pods-ITmentors/Pods-ITmentors.release.xcconfig"; sourceTree = "<group>"; };
@@ -119,6 +129,7 @@
 				17174B3C28E5754600C7BD3C /* DetailedMentorWorker.swift */,
 				17174B3D28E5754600C7BD3C /* DetailedMentorRouter.swift */,
 				17174B3E28E5754600C7BD3C /* DetailedMentorModels.swift */,
+				17F5A95628EB3047002546EF /* DetailedMentorConfigurator.swift */,
 			);
 			path = DetailedMentorScene;
 			sourceTree = "<group>";
@@ -133,6 +144,7 @@
 				17174B4928E6D93300C7BD3C /* BecomeMentorWorker.swift */,
 				17174B4A28E6D93300C7BD3C /* BecomeMentorRouter.swift */,
 				17174B4B28E6D93300C7BD3C /* BecomeMentorModels.swift */,
+				17F5A95828EB311D002546EF /* BecomeMentorConfigurator.swift */,
 			);
 			path = BecomeMentorScene;
 			sourceTree = "<group>";
@@ -156,6 +168,7 @@
 				17E679D428E379E400B140B5 /* ProfileScreenWorker.swift */,
 				17E679D528E379E400B140B5 /* ProfileScreenRouter.swift */,
 				17E679D628E379E400B140B5 /* ProfileScreenModels.swift */,
+				17F5A95A28EB318C002546EF /* ProfileScreenConfigurator.swift */,
 			);
 			path = ProfileScene;
 			sourceTree = "<group>";
@@ -179,6 +192,7 @@
 				17E679C628E379B200B140B5 /* MentorsScreenWorker.swift */,
 				17E679C728E379B200B140B5 /* MentorsScreenRouter.swift */,
 				17E679C828E379B200B140B5 /* MentorsScreenModels.swift */,
+				17F5A95428EB2EAC002546EF /* MentorListConfigurator.swift */,
 			);
 			path = MentorsListScene;
 			sourceTree = "<group>";
@@ -204,6 +218,7 @@
 		17E6797C28E3766B00B140B5 /* ITmentors */ = {
 			isa = PBXGroup;
 			children = (
+				17F5A95C28EB3F43002546EF /* GoogleService-Info.plist */,
 				17E679BF28E3795100B140B5 /* Helpers */,
 				17E679C428E379A200B140B5 /* Scenes */,
 				17E679B828E378E500B140B5 /* App&scene delegates */,
@@ -343,6 +358,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				17E6798A28E3766D00B140B5 /* LaunchScreen.storyboard in Resources */,
+				17F5A95D28EB3F43002546EF /* GoogleService-Info.plist in Resources */,
 				17E6798728E3766D00B140B5 /* Assets.xcassets in Resources */,
 				17E6798528E3766B00B140B5 /* Main.storyboard in Resources */,
 			);
@@ -401,6 +417,7 @@
 				17E679DB28E379E400B140B5 /* ProfileScreenRouter.swift in Sources */,
 				17174B4E28E6D93300C7BD3C /* BecomeMentorPresenter.swift in Sources */,
 				17E679D928E379E400B140B5 /* ProfileScreenPresenter.swift in Sources */,
+				17F5A95928EB311D002546EF /* BecomeMentorConfigurator.swift in Sources */,
 				17E679BE28E3793F00B140B5 /* TabBarController.swift in Sources */,
 				17E679DA28E379E400B140B5 /* ProfileScreenWorker.swift in Sources */,
 				17E679DD28E379E400B140B5 /* ProfileScreenViewController.swift in Sources */,
@@ -412,6 +429,7 @@
 				17174B4428E5754700C7BD3C /* DetailedMentorModels.swift in Sources */,
 				17E679DE28E379E400B140B5 /* ProfileScreenInteractor.swift in Sources */,
 				17174B4F28E6D93300C7BD3C /* BecomeMentorWorker.swift in Sources */,
+				17F5A95528EB2EAD002546EF /* MentorListConfigurator.swift in Sources */,
 				17E679CE28E379B200B140B5 /* MentorsScreenModels.swift in Sources */,
 				17174B4228E5754700C7BD3C /* DetailedMentorWorker.swift in Sources */,
 				17174B5328E6D93300C7BD3C /* BecomeMentorInteractor.swift in Sources */,
@@ -427,12 +445,14 @@
 				17174B3728E4DF4700C7BD3C /* UIColor + gradient.swift in Sources */,
 				17E679D028E379B200B140B5 /* MentorsScreenInteractor.swift in Sources */,
 				17174B4628E5754700C7BD3C /* DetailedMentorInteractor.swift in Sources */,
+				17F5A95728EB3047002546EF /* DetailedMentorConfigurator.swift in Sources */,
 				17E679C328E3798200B140B5 /* AppColors.swift in Sources */,
 				17174B3928E566BA00C7BD3C /* LanguageModel.swift in Sources */,
 				17E679CD28E379B200B140B5 /* MentorsScreenRouter.swift in Sources */,
 				17E679C128E3796D00B140B5 /* UIColor + hex.swift in Sources */,
 				17174B4528E5754700C7BD3C /* DetailedMentorViewController.swift in Sources */,
 				17E679CB28E379B200B140B5 /* MentorsScreenPresenter.swift in Sources */,
+				17F5A95B28EB318C002546EF /* ProfileScreenConfigurator.swift in Sources */,
 				17E679DC28E379E400B140B5 /* ProfileScreenModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

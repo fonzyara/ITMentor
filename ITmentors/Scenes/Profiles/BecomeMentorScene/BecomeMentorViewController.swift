@@ -28,12 +28,11 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
+        BecomeMentorConfigurator.shared.configure(with: self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
     }
 
     // MARK: View lifecycle
@@ -64,25 +63,11 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
     func displayCompletion(viewModel: BecomeMentor.LoadDataOnServer.ViewModel) {
         //nameTextField.text = viewModel.name
     }
-    // MARK: Setup
-
-    private func setup() {
-        let viewController = self
-        let interactor = BecomeMentorInteractor()
-        let presenter = BecomeMentorPresenter()
-        let router = BecomeMentorRouter()
-        viewController.interactor = interactor
-        viewController.router = router
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
-    }
 
 
 
 
-    let scrollView: UIScrollView = {
+    private let scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.backgroundColor = UIColor.AppPalette.backgroundColor
         sv.isScrollEnabled = true
@@ -92,7 +77,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
     }()
 
 
-    let selectedImageView: UIImageView = {
+    private let selectedImageView: UIImageView = {
       let iv = UIImageView()
         iv.backgroundColor = .darkGray
         iv.layer.borderColor = UIColor.AppPalette.secondElementColor.cgColor
@@ -101,7 +86,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         iv.clipsToBounds = true
         return iv
     }()
-    let imageViewHeader: UILabel = {
+    private let imageViewHeader: UILabel = {
         let l = UILabel()
         l.textColor = .darkGray
         l.text = "Выберите ваше фото"
@@ -109,7 +94,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
 
         return l
     }()
-    let shortDiscription: UITextField = {
+    private let shortDiscription: UITextField = {
         var textField = UITextField()
         textField.text = "Например: Senior IOS dev"
         textField.backgroundColor = UIColor.AppPalette.secondElementColor
@@ -126,7 +111,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         return textField
 
     }()
-    let shortDiscriptionLabel: UILabel = {
+    private let shortDiscriptionLabel: UILabel = {
         let l = UILabel()
         l.textColor = .darkGray
         l.text = "Введите краткое описание"
@@ -134,7 +119,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
 
         return l
     }()
-    let messageLink: UITextField = {
+    private let messageLink: UITextField = {
         var textField = UITextField()
         textField.text = "Например: https://t.me/escaping_closure"
         textField.backgroundColor = UIColor.AppPalette.secondElementColor
@@ -151,7 +136,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         return textField
 
     }()
-    let messageLinkLabel: UILabel = {
+    private let messageLinkLabel: UILabel = {
         let l = UILabel()
         l.textColor = .darkGray
         l.text = "!Ссылка! для связи с вами"
@@ -160,7 +145,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         return l
     }()
     
-    let name: UITextField = {
+    private let name: UITextField = {
         var textField = UITextField()
         textField.text = "Например: Владимир"
         textField.backgroundColor = UIColor.AppPalette.secondElementColor
@@ -176,7 +161,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         textField.layer.cornerRadius = 10
         return textField
     }()
-    let nameLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let l = UILabel()
         l.textColor = .darkGray
         l.text = "Как вас зовут?"
@@ -185,7 +170,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         return l
     }()
     
-    let discription: UITextView = {
+    private let discription: UITextView = {
         var textView = UITextView()
         textView.text = "Например: Помогаю новичкам со входом в IT. Подскажу на счет резюме и проведу мок собес."
 
@@ -199,7 +184,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         return textView
 
     }()
-    let discriptionLabel: UILabel = {
+    private let discriptionLabel: UILabel = {
         let l = UILabel()
         l.textColor = .darkGray
         l.text = "Введите подробное описание"
@@ -207,14 +192,15 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         return l
     }()
 
-    let confirmButton: UIButton = {
+    private let confirmButton: UIButton = {
         let b = UIButton()
         b.backgroundColor = .AppPalette.secondElementColor
         b.setTitle("Подтвердить", for: .normal)
         b.addTarget(self, action: #selector(confirm), for: .touchUpInside)
        return b
     }()
-    let selectLanguagesButton: UIButton = {
+    
+    private let selectLanguagesButton: UIButton = {
         let b = UIButton()
         b.backgroundColor = .blue
         b.setTitle("Выбрать языки программирования", for: .normal)
@@ -222,12 +208,23 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         b.layer.cornerRadius = 10
       return b
     }()
-    @objc func selectLanguagelTransition(){
+    
+    private let collectionViewOfLanguages: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 6
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+       return collectionView
+    }()
+
+    @objc private func selectLanguagelTransition(){
         let selectLanguagesVC = SelectLanguagesViewController()
         selectLanguagesVC.returnArrayOfLanguagesToPreviousScreenDelegate = self
         router?.navigateToSomewhere(source: self, destination: selectLanguagesVC)
     }
-    @objc func confirm(){
+    @objc private func confirm(){
 //        guard let photoData = selectedImageView.image?.pngData() else {return}
 //        guard let shortDiscriptionn = shortDiscription.text, shortDiscription.text != "", shortDiscription.text != "Например: Senior IOS dev"  else {return}
 //        guard let discriptionn = discription.text, discription.text != "", discription.text != "Например: Помогаю новичкам со входом в IT. Подскажу на счет резюме и проведу мок собес." else {return}
@@ -239,7 +236,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
 
 //MARK: - subviews & constraints
 extension BecomeMentorViewController{
-    func setConstraints() {
+    private func setConstraints() {
         hideKeyboardWhenTappedAround()
 //        scrollView.delegate = self
 //        scrollView.contentSize = CGSize(width:self.view.frame.size.width, height: 1000)
@@ -338,10 +335,55 @@ extension BecomeMentorViewController{
         }
         
         selectLanguagesButton.snp.makeConstraints { make in
-            make.top.equalTo(messageLink.snp.bottom).offset(15)
+            make.top.equalTo(messageLink.snp.bottom).offset(30)
             make.width.equalTo(itemsWidth)
             make.centerX.equalToSuperview()
             make.height.equalTo(40)
+        }
+    }
+    
+    func layoutCollectionView(){
+        let screensize: CGRect = UIScreen.main.bounds
+        let itemsWidth = screensize.width * 0.9
+        var heigth = 0
+        //calculate collectionViewHeight
+        for i in 1...arrayOfLanguages.count + 1 {if i % 3 == 0{heigth += 35}}
+        if heigth == 0 {heigth = 30}
+        
+
+        if scrollView.contains(collectionViewOfLanguages){
+            collectionViewOfLanguages.reloadData()
+            collectionViewOfLanguages.snp.remakeConstraints { make in
+                make.top.equalTo(selectLanguagesButton.snp.bottom).offset(15)
+                make.width.equalTo(itemsWidth)
+                make.centerX.equalToSuperview()
+                make.height.equalTo(heigth)
+            }
+        } else {
+            scrollView.addSubview(collectionViewOfLanguages)
+            collectionViewOfLanguages.delegate = self
+            collectionViewOfLanguages.dataSource = self
+            collectionViewOfLanguages.register(LanguageCollectionViewCell.self, forCellWithReuseIdentifier: "LanguageCell")
+            
+            collectionViewOfLanguages.snp.makeConstraints { make in
+                make.top.equalTo(selectLanguagesButton.snp.bottom).offset(15)
+                make.width.equalTo(itemsWidth)
+                make.centerX.equalToSuperview()
+                make.height.equalTo(heigth)
+            }
+        }
+        
+        
+        
+        guard arrayOfLanguages.count >= 1 else {confirmButton.removeFromSuperview(); return}
+        
+        scrollView.addSubview(confirmButton)
+        
+        confirmButton.snp.makeConstraints { make in
+            make.top.equalTo(collectionViewOfLanguages.snp.bottom).offset(30)
+            make.width.equalTo(itemsWidth)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(50)
         }
     }
 }
@@ -437,5 +479,65 @@ extension BecomeMentorViewController: ReturnArrayOfLanguagesToPreviousScreenProt
     func getArray(array: [Languages]) {
         arrayOfLanguages = array
         print(arrayOfLanguages)
+        layoutCollectionView()
     }
 }
+
+//MARK: UICollectionViewDataSource
+extension BecomeMentorViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath.row)
+    }
+
+}
+//MARK: UICollectionViewDataSource
+
+extension BecomeMentorViewController: UICollectionViewDataSource {
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return arrayOfLanguages.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LanguageCell", for: indexPath) as! LanguageCollectionViewCell
+        cell.update(language: arrayOfLanguages[indexPath.row])
+
+        return cell
+    }
+}
+
+
+//MARK: UICollectionViewDelegateFlowLayout
+extension BecomeMentorViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return CGSize(width: view.bounds.width * 0.3, height: 30)
+    }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
+        let numberOfItems = CGFloat(collectionView.numberOfItems(inSection: section))
+        let combinedItemWidth = (numberOfItems * flowLayout.itemSize.width) + ((numberOfItems - 1)  * flowLayout.minimumInteritemSpacing)
+        let padding = ((collectionView.frame.width - combinedItemWidth) / 2) - (combinedItemWidth / CGFloat(arrayOfLanguages.count)) + CGFloat(arrayOfLanguages.count) + 18
+        return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
+    }
+}
+

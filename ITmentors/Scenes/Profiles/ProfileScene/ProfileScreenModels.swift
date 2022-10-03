@@ -16,13 +16,13 @@ enum ProfileScreen {
     // MARK: Use cases
     
     enum Something {
-        struct Request {
-        }
-        
         struct Response {
+            var isSignedInWithApple: Bool?
+            var isYourInfoFilled: Bool?
         }
         
         struct ViewModel {
+            var viewControllerWeNeedToShow: UIViewController
         }
     }
 }

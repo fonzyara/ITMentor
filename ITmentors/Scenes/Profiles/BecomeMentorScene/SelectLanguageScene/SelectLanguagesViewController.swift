@@ -29,7 +29,7 @@ class SelectLanguagesViewController: UIViewController {
         tableView.register(LanguageTableViewCell.self, forCellReuseIdentifier: "LanguageTableViewCell")
     }
     
-    let tableView: UITableView = {
+    private let tableView: UITableView = {
        let t = UITableView()
         t.backgroundColor = .AppPalette.elementsColor
         t.separatorColor = .white
@@ -37,7 +37,7 @@ class SelectLanguagesViewController: UIViewController {
        return t
     }()
     
-    let label: UILabel = {
+    private let label: UILabel = {
       let l = UILabel()
         l.text = "Языки программирования, которые вы используете"
         l.textColor = .white
@@ -47,7 +47,7 @@ class SelectLanguagesViewController: UIViewController {
         l.adjustsFontSizeToFitWidth = true
         return l
     }()
-    let confirmButton: UIButton = {
+    private let confirmButton: UIButton = {
         let b = UIButton()
         b.backgroundColor = .blue
         b.addTarget(self, action: #selector(returnArrayOfLanguagesToPreviousScreen), for: .touchUpInside)
@@ -66,12 +66,13 @@ class SelectLanguagesViewController: UIViewController {
             self.returnArrayOfLanguagesToPreviousScreenDelegate?.getArray(array: viewModel?.arrayOfSelectedLanguages ?? [])
         
     }
+    
 }
 
 
 //MARK: -  Constraints
 extension SelectLanguagesViewController{
-    func setConstraints(){
+    private func setConstraints(){
         view.addSubview(tableView)
         view.addSubview(label)
         view.addSubview(confirmButton)

@@ -18,8 +18,7 @@ protocol DetailedMentorDisplayLogic: AnyObject {
 
 class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic {
     
-    //@IBOutlet private var nameTextField: UITextField!
-    //    var data
+  
     
     var interactor: DetailedMentorBusinessLogic?
     var router: (NSObjectProtocol & DetailedMentorRoutingLogic & DetailedMentorDataPassing)?
@@ -30,12 +29,14 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
+        DetailedMentorConfigurator.shared.configure(with: self)
+
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
+        DetailedMentorConfigurator.shared.configure(with: self)
+
     }
     
     // MARK: View lifecycle
@@ -47,12 +48,13 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
     }
     
     
-    // MARK: Do something
+    // MARK: interactor tasks
     
-    func showMentorInfo() {
+    private func showMentorInfo() {
         interactor?.showMentorInfo()
     }
     
+    // MARK: presenter
     func showMentorInfo(viewModel: DetailedMentor.ShowMentorInfo.ViewModel) {
         self.navigationItem.title = viewModel.name
         setConstraints()
@@ -83,7 +85,7 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
     }
     
     
-    let mentorImageView: UIImageView = {
+    private let mentorImageView: UIImageView = {
         let iv = UIImageView()
         //        iv.layer.cornerRadius = mentorImageView.frame.size.width / 2
         iv.layer.masksToBounds = true
@@ -94,7 +96,7 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
         iv.layer.borderWidth = 2
         return iv
     }()
-    let shortDiscriptionLabel: UILabel = {
+    private let shortDiscriptionLabel: UILabel = {
         let l = UILabel()
         l.textColor = .gray
         l.textAlignment = .center
@@ -105,7 +107,7 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
 //        l.font = UIFont.systemFont(ofSize: 15)
         return l
     }()
-    let discriptionLabel: UILabel = {
+    private let discriptionLabel: UILabel = {
         let l = UILabel()
         l.textColor = .white
         l.textAlignment = .center
@@ -116,7 +118,7 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
 //        l.font = UIFont.systemFont(ofSize: 15)
         return l
     }()
-    let writeToMentorButton: UIButton = {
+    private let writeToMentorButton: UIButton = {
         let b = UIButton()
         b.backgroundColor = .blue
         b.addTarget(self, action: #selector(writeMentor), for: .touchUpInside)
@@ -125,14 +127,14 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
        return b
     }()
     
-    @objc func writeMentor(){
+    @objc private func writeMentor(){
         guard messageLink != "" else {return}
         guard let url = URL(string: messageLink) else {return}
         UIApplication.shared.open(url)
     }
     
     
-    let collectionViewOfLanguages: UICollectionView = {
+    private let collectionViewOfLanguages: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 6

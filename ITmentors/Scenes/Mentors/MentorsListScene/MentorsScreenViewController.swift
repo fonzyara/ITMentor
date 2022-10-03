@@ -19,19 +19,16 @@ protocol MentorsScreenDisplayLogic: AnyObject {
 class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, ConstraintRelatableTarget {
     func displayMentorCells(viewModel: MentorsScreen.ShowMentorCells.ViewModel) {
         rows = viewModel.rows
-        print(viewModel.rows.first?.cellIdentifier)
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [unowned self] in
             
-            self.addSubviews()
-            self.addConstraints()
-//            self.tableViewOfMentors.reloadData()
+            addSubviews()
+            addConstraints()
         }
         return
     }
     
     private var rows: [CellIdentifiable] = []
 
-    //@IBOutlet private var nameTextField: UITextField!
     
     var interactor: MentorsScreenBusinessLogic?
     var router: (NSObjectProtocol & MentorsScreenRoutingLogic & MentorsScreenDataPassing)?
@@ -40,34 +37,18 @@ class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, 
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
+        MentorsListConfigurator.shared.configure(with: self)
+        view.backgroundColor = .AppPalette.backgroundColor
+        interactor?.loadMentors()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
+        MentorsListConfigurator.shared.configure(with: self)
+
     }
     
-    // MARK: View lifecycle
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .AppPalette.backgroundColor
-        interactor?.loadMentors()
-        
-    }
-    
-    // MARK: Routing
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let scene = segue.identifier {
-            let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
-            if let router = router, router.responds(to: selector) {
-                router.perform(selector, with: segue)
-            }
-        }
-    }
     
     
     
@@ -88,7 +69,7 @@ class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, 
         router.dataStore = interactor
     }
     
-    let tableViewOfMentors: UITableView = {
+    private let tableViewOfMentors: UITableView = {
        let tv = UITableView()
         
         tv.backgroundColor = UIColor.AppPalette.elementsColor
@@ -129,7 +110,7 @@ extension MentorsScreenViewController: UITableViewDelegate, UITableViewDataSourc
 }
 
 extension MentorsScreenViewController{
-    func addSubviews(){
+    private func addSubviews(){
         tableViewOfMentors.delegate = self
         tableViewOfMentors.dataSource = self
         tableViewOfMentors.register(MentorCell.self, forCellReuseIdentifier: "MentorCell")
@@ -138,7 +119,7 @@ extension MentorsScreenViewController{
         
     }
     
-    func addConstraints(){
+    private func addConstraints(){
         tableViewOfMentors.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(15)
             make.right.equalToSuperview().offset(-15)

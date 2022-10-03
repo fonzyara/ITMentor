@@ -13,7 +13,7 @@
 import UIKit
 
 protocol ProfileScreenBusinessLogic {
-    func doSomething(request: ProfileScreen.Something.Request)
+    func showAuthScreenIfNeeded()
 }
 
 protocol ProfileScreenDataStore {
@@ -28,11 +28,13 @@ class ProfileScreenInteractor: ProfileScreenBusinessLogic, ProfileScreenDataStor
     
     // MARK: Do something
     
-    func doSomething(request: ProfileScreen.Something.Request) {
+    func showAuthScreenIfNeeded() {
         worker = ProfileScreenWorker()
         worker?.doSomeWork()
         
-        let response = ProfileScreen.Something.Response()
+        let isSignedInWithApple = UserDefaults.standard.bool(forKey: "isSignedInWithApple")
+        let isInfoFilled = UserDefaults.standard.bool(forKey: "isInfoFilled")
+        let response = ProfileScreen.Something.Response(isSignedInWithApple: isSignedInWithApple, isYourInfoFilled: isInfoFilled)
         presenter?.presentSomething(response: response)
     }
 }

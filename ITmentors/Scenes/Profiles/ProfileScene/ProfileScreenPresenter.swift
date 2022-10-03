@@ -23,7 +23,7 @@ class ProfileScreenPresenter: ProfileScreenPresentationLogic {
     // MARK: Do something
     
     func presentSomething(response: ProfileScreen.Something.Response) {
-        let viewModel = ProfileScreen.Something.ViewModel()
+        let viewModel = ProfileScreen.Something.ViewModel(viewControllerWeNeedToShow: SelectLanguagesViewController())
         viewController?.displaySomething(viewModel: viewModel)
     }
 }

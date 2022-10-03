@@ -27,55 +27,31 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
+        ProfileMentorConfigurator.shared.configure(with: self)
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
+        ProfileMentorConfigurator.shared.configure(with: self)
     }
     
     // MARK: View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        doSomething()
+        showRegistationScreenIfNeeded()
         view.backgroundColor = .AppPalette.backgroundColor
     }
     
-    // MARK: Routing
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let scene = segue.identifier {
-            let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
-            if let router = router, router.responds(to: selector) {
-                router.perform(selector, with: segue)
-            }
-        }
-    }
     
     // MARK: Do something
     
-    func doSomething() {
-        let request = ProfileScreen.Something.Request()
-        interactor?.doSomething(request: request)
+    func showRegistationScreenIfNeeded() {
+//        let request = ProfileScreen.Something.Request()
+        interactor?.showAuthScreenIfNeeded()
     }
     
     func displaySomething(viewModel: ProfileScreen.Something.ViewModel) {
         //nameTextField.text = viewModel.name
-    }
-    // MARK: Setup
-    
-    private func setup() {
-        let viewController = self
-        let interactor = ProfileScreenInteractor()
-        let presenter = ProfileScreenPresenter()
-        let router = ProfileScreenRouter()
-        viewController.interactor = interactor
-        viewController.router = router
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
     }
 }
