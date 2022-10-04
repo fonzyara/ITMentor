@@ -24,17 +24,18 @@ class ProfileScreenInteractor: ProfileScreenBusinessLogic, ProfileScreenDataStor
     
     var presenter: ProfileScreenPresentationLogic?
     var worker: ProfileScreenWorker?
-    //var name: String = ""
+    
     
     // MARK: Do something
     
     func showAuthScreenIfNeeded() {
-        worker = ProfileScreenWorker()
-        worker?.doSomeWork()
-        
         let isSignedInWithApple = UserDefaults.standard.bool(forKey: "isSignedInWithApple")
         let isInfoFilled = UserDefaults.standard.bool(forKey: "isInfoFilled")
+        print(isInfoFilled)
+        print(isSignedInWithApple)
         let response = ProfileScreen.Something.Response(isSignedInWithApple: isSignedInWithApple, isYourInfoFilled: isInfoFilled)
+        guard response.isSignedInWithApple != true || response.isYourInfoFilled != true else {return}
         presenter?.presentSomething(response: response)
     }
+    
 }

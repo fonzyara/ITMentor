@@ -11,8 +11,62 @@
 //
 
 import UIKit
+import FirebaseFirestore
+import FirebaseStorage
+import Firebase
 
 class BecomeMentorWorker {
-    func doSomeWork() {
+    func loadToFirebase(name: String?, description: String?, imageData: Data?, languages: [Languages], messageLink: String?, shortDescription: String?, completion: @escaping () -> (), error: @escaping () -> ()) {
+        print(1)
+        guard let yourID = UserDefaults.standard.string(forKey: "ShortUUID") else {error(); return}
+        print(2)
+        guard InternetConnectionManager.isConnectedToNetwork() == true else {error(); return}
+        print(3)
+        let ref = Firestore.firestore().collection("Mentors").document(yourID)
+        
+        ref.setData([
+            "Name": name as Any,
+            "ShortDescription": shortDescription as Any,
+            "Description": description as Any,
+            "MessageLink": messageLink as Any,
+        ], merge: true)
+        let languageRef = ref.collection("Languages")
+//        languageRef.
+        print(4)
+
+        for i in languages{
+            let currectLanguageLink = languageRef.document(i.languageName)
+            currectLanguageLink.setData(["LanguageName": i.languageName], merge: true)
+            print(5)
+
+        }
+        
+        print(6)
+
+        uploadImage(withImage: imageData, userID: yourID) {
+            completion()
+            print(7)
+            
+        } error: {
+            error()
+        }
+        
+    }
+    
+    
+    private func uploadImage(withImage: Data?, userID: String, completion: @escaping () -> (), error: @escaping () -> ()){
+        let ref = Storage.storage().reference().child("avatars").child(userID)
+        guard let data = withImage else {return}
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        guard let photo1 = UIImage(data: data) else {return}
+        guard let photo = photo1.jpegData(compressionQuality: 0.4) else {return}
+        
+        
+        ref.putData(photo, metadata: metadata) { (metadata, err) in
+            guard err == nil else {error(); return}
+            completion()
+        }
+
     }
 }

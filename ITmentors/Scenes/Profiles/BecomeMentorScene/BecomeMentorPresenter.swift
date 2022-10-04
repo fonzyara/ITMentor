@@ -23,7 +23,7 @@ class BecomeMentorPresenter: BecomeMentorPresentationLogic {
     // MARK: Do something
     
     func presentSomething(response: BecomeMentor.LoadDataOnServer.Response) {
-        let viewModel = BecomeMentor.LoadDataOnServer.ViewModel()
+        let viewModel = BecomeMentor.LoadDataOnServer.ViewModel(isSuccesed: response.isSuccesed)
         viewController?.displayCompletion(viewModel: viewModel)
     }
 }

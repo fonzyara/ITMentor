@@ -13,7 +13,7 @@
 import UIKit
 
 protocol BecomeMentorBusinessLogic {
-    func doSomething(request: BecomeMentor.LoadDataOnServer.Request)
+    func loadInfoToFirebase(request: BecomeMentor.LoadDataOnServer.Request)
 }
 
 protocol BecomeMentorDataStore {
@@ -28,11 +28,23 @@ class BecomeMentorInteractor: BecomeMentorBusinessLogic, BecomeMentorDataStore {
     
     // MARK: Do something
     
-    func doSomething(request: BecomeMentor.LoadDataOnServer.Request) {
+    func loadInfoToFirebase(request: BecomeMentor.LoadDataOnServer.Request) {
+        let name = request.name
+        let discription = request.discription
+        let shortDescription = request.shortDiscription
+        let imageData = request.imageData
+        let languages = request.languages
+        let messageLink = request.messageLink
         worker = BecomeMentorWorker()
-        worker?.doSomeWork()
-        
-        let response = BecomeMentor.LoadDataOnServer.Response()
-        presenter?.presentSomething(response: response)
+        worker?.loadToFirebase(name: name, description: discription, imageData: imageData, languages: languages, messageLink: messageLink, shortDescription: shortDescription, completion: {
+            let response = BecomeMentor.LoadDataOnServer.Response(isSuccesed: true)
+            self.presenter?.presentSomething(response: response)
+            UserDefaults.standard.set(true, forKey: "isInfoFilledC")
+
+        }, error: {
+            let response = BecomeMentor.LoadDataOnServer.Response(isSuccesed: false)
+            self.presenter?.presentSomething(response: response)
+        })
+
     }
 }

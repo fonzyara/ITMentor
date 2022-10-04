@@ -13,7 +13,7 @@
 import UIKit
 
 protocol ProfileScreenDisplayLogic: AnyObject {
-    func displaySomething(viewModel: ProfileScreen.Something.ViewModel)
+    func showAuthOrFillInfoScreen(viewModel: ProfileScreen.Something.ViewModel?)
 }
 
 class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
@@ -44,14 +44,23 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
     }
     
     
-    // MARK: Do something
+        
     
+    
+    // MARK: Do something
     func showRegistationScreenIfNeeded() {
-//        let request = ProfileScreen.Something.Request()
         interactor?.showAuthScreenIfNeeded()
     }
     
-    func displaySomething(viewModel: ProfileScreen.Something.ViewModel) {
-        //nameTextField.text = viewModel.name
+    func showAuthOrFillInfoScreen(viewModel: ProfileScreen.Something.ViewModel?) {
+        guard let vcWeNeedToShow = viewModel?.viewControllerWeNeedToShow else {return}
+        if vcWeNeedToShow is SignInWithAppleViewController {
+            router?.navigateToSingInViewController(source: self, destination: vcWeNeedToShow as! SignInWithAppleViewController)
+        }
+        else if vcWeNeedToShow is BecomeMentorViewController {
+            router?.navigateToFillDataViewController(source: self, destination: vcWeNeedToShow as! BecomeMentorViewController)
+        }
+//        else
     }
 }
+

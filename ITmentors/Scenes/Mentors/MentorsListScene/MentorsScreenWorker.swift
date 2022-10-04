@@ -11,8 +11,105 @@
 //
 
 import UIKit
-
+import FirebaseFirestore
+import FirebaseStorage
+import Firebase
 class MentorsScreenWorker {
-    func doSomeWork() {
+    func getMentorsList(completion: @escaping ([MentorCellModel]) -> (), error: @escaping () -> ()){
+        var arrayOfMentors: [MentorCellModel] = []
+        
+        let ref = Firestore.firestore().collection("Mentors")
+        
+        ref.getDocuments { (documents, err) in
+            guard err == nil else {error(); return}
+            guard let documents = documents else {error(); return}
+            
+            for doc in documents.documents{
+                let data = doc.data()
+                let name = data["Name"] as? String
+                let description = data["Description"] as? String
+                let shortDescription = data["ShortDescription"] as? String
+                let messageLink = data["MessageLink"] as? String
+                let appleUUID = data["AppleUUID"] as? String
+    
+                var arrayOfLanguages: [Languages]?
+                self.loadLanguages(doc: doc) { languages in
+                    arrayOfLanguages = languages
+                }
+                var imageData: Data?
+                self.loadImage(userID: appleUUID ?? "") { imgData in
+                    imageData = imgData
+                    let newMentor = MentorCellModel(name: name, discription: description, shortDiscription: shortDescription, imageData: imageData, languages: arrayOfLanguages ?? [], messageLink: messageLink)
+                
+                    arrayOfMentors.append(newMentor)
+                    
+                    completion(arrayOfMentors)
+
+                }
+                
+
+
+            }
+            
+        }
+        
+        
+    }
+    
+    
+    private func loadLanguages(doc: QueryDocumentSnapshot, completion: @escaping ([Languages]) -> ()){
+        var arrayOfLanguages: [Languages] = []
+        
+        let enumer = LanguageNameToEnumType()
+        doc.reference.collection("Languages").getDocuments { languages, errorr in
+            guard errorr == nil else {return}
+            guard let documentss = languages else {return}
+            
+            for doc in documentss.documents{
+                let data = doc.data()
+                guard let languageName = data["LanguageName"] as? String else {return}
+                    
+                arrayOfLanguages.append(enumer.from(languageName))
+                print(arrayOfLanguages)
+            }
+            print(arrayOfLanguages)
+            completion(arrayOfLanguages)
+        }
+        
+        
+    }
+
+    private func loadImage(userID: String, completion: @escaping (Data?) -> ()){
+        let ref = Storage.storage().reference().child("avatars").child(userID)
+        var imageData = Data()
+        ref.getData(maxSize: 1024 * 1024 * 2) { data, error in
+            guard error == nil else {return}
+            guard let imageData = data else {return}
+            completion(data)
+        }
+        
+        
+    }
+    
+}
+
+class LanguageNameToEnumType{
+    func from(_ string: String) -> Languages{
+        switch string{
+        case "C++":
+            return .cPlusPlus
+        case "JS":
+            return .js
+        case "PHP":
+            return .php
+        case "Python":
+            return .python
+        case "Ruby":
+            return .ruby
+        case "Swift":
+            return .swift
+        default:
+            return .ruby
+        }
     }
 }

@@ -21,8 +21,8 @@ class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, 
         rows = viewModel.rows
         DispatchQueue.main.async { [unowned self] in
             
-            addSubviews()
-            addConstraints()
+            spinner.removeFromSuperview()
+            makeTableViewConstraints(withTableViewHeigth: CGFloat(rows.count * 120))
         }
         return
     }
@@ -47,26 +47,10 @@ class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, 
         MentorsListConfigurator.shared.configure(with: self)
 
     }
-    
-    
-    
-    
-    
-    
-    
-    // MARK: Setup
-    
-    private func setup() {
-        let viewController = self
-        let interactor = MentorsScreenInteractor()
-        let presenter = MentorsScreenPresenter()
-        let router = MentorsScreenRouter()
-        viewController.interactor = interactor
-        viewController.router = router
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addSubviews()
+        setConstraints()
     }
     
     private let tableViewOfMentors: UITableView = {
@@ -81,6 +65,13 @@ class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, 
         return tv
     }()
     
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.startAnimating()
+        spinner.color = .white
+    return spinner
+    }()
     
     
 }
@@ -111,21 +102,29 @@ extension MentorsScreenViewController: UITableViewDelegate, UITableViewDataSourc
 
 extension MentorsScreenViewController{
     private func addSubviews(){
+        view.addSubview(spinner)
+        
         tableViewOfMentors.delegate = self
         tableViewOfMentors.dataSource = self
         tableViewOfMentors.register(MentorCell.self, forCellReuseIdentifier: "MentorCell")
+        
         view.addSubview(tableViewOfMentors)
 
         
     }
     
-    private func addConstraints(){
+    private func setConstraints(){
+        spinner.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+        }
+    }
+    private func makeTableViewConstraints(withTableViewHeigth: CGFloat){
         tableViewOfMentors.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(15)
             make.right.equalToSuperview().offset(-15)
 
             make.top.equalToSuperview().offset(30)
-            make.height.equalTo(300)
+            make.height.equalTo(withTableViewHeigth)
         }
     }
 }

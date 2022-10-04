@@ -30,19 +30,25 @@ class MentorsScreenInteractor: MentorsScreenBusinessLogic, MentorsScreenDataStor
     
     func loadMentors() {
         worker = MentorsScreenWorker()
-        worker?.doSomeWork()
-        
-        
+        worker?.getMentorsList(completion: { mentorsArray in
+            let response = MentorsScreen.ShowMentorCells.Response(mentorCellsData: mentorsArray)
+            self.presenter?.presentMentors(response: response)
+            print("lalala")
+            print(mentorsArray)
+        }, error: {
+            print("Error")
+//            presenter.
+        })
         //fake data
-        var array: [MentorCellModel] = []
-        let lala: MentorCellModel = MentorCellModel(name: "Vladimir", discription: "Помогаю со входом в IOS разработку. Пишите в тг", shortDiscription: "Senior IOS dev =(", imageData: UIImage(named: "myPhoto")?.pngData(), languages: [.swift, .ruby, .cPlusPlus, .js, .php, .python], messageLink: "https://t.me/escaping_closure")
-        array.append(lala)
+//        var array: [MentorCellModel] = []
+//        let lala: MentorCellModel = MentorCellModel(name: "Vladimir", discription: "Помогаю со входом в IOS разработку. Пишите в тг", shortDiscription: "Senior IOS dev =(", imageData: UIImage(named: "myPhoto")?.pngData(), languages: [.swift, .ruby, .cPlusPlus, .js, .php, .python], messageLink: "https://t.me/escaping_closure")
+//        array.append(lala)
         //.swift, .ruby, .cPlusPlus, .js, .php, .python
 //        array.append(lala)
 //        array.append(lala)
 
         
-        let response = MentorsScreen.ShowMentorCells.Response(mentorCellsData: array)
-        presenter?.presentMentors(response: response)
+//        let response = MentorsScreen.ShowMentorCells.Response(mentorCellsData: array)
+//        presenter?.presentMentors(response: response)
     }
 }

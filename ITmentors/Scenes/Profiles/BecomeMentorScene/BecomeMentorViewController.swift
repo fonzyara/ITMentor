@@ -17,7 +17,7 @@ protocol BecomeMentorDisplayLogic: AnyObject {
 }
 
 class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UINavigationControllerDelegate {
-
+    var isBackButtonHidden = false
     var imagePicker = UIImagePickerController()
     var arrayOfLanguages: [Languages] = []
 
@@ -39,7 +39,8 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.prefersLargeTitles = false
+//        self.navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.hidesBackButton = true
 
         setConstraints()
     }
@@ -55,13 +56,19 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
     }
     // MARK: Do something
 
-    func loadDataOnServer() {
-//        let request = BecomeMentor.LoadDataOnServer.Request(name: <#T##String?#>, discription: <#T##String?#>, imageData: <#T##Data?#>, languages: <#T##[Languages]#>, messageLink: <#T##String?#>, shortDiscription: <#T##String?#>)
-//        interactor?.doSomething(request: request)
-    }
+ 
 
     func displayCompletion(viewModel: BecomeMentor.LoadDataOnServer.ViewModel) {
-        //nameTextField.text = viewModel.name
+        print(viewModel.isSuccesed)
+        if viewModel.isSuccesed == true{
+            navigationController?.popToRootViewController(animated: true)
+        }
+        else {
+            let dialogMessage = UIAlertController(title: "Ошибка", message: "Не удалось загрузить данные на сервер. Попробуйте проверить сетевое соединение", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "Что ж :(", style: .default)
+             dialogMessage.addAction(ok)
+            self.present(dialogMessage, animated: true)
+        }
     }
 
 
@@ -225,11 +232,14 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         router?.navigateToSomewhere(source: self, destination: selectLanguagesVC)
     }
     @objc private func confirm(){
-//        guard let photoData = selectedImageView.image?.pngData() else {return}
-//        guard let shortDiscriptionn = shortDiscription.text, shortDiscription.text != "", shortDiscription.text != "Например: Senior IOS dev"  else {return}
-//        guard let discriptionn = discription.text, discription.text != "", discription.text != "Например: Помогаю новичкам со входом в IT. Подскажу на счет резюме и проведу мок собес." else {return}
-//        let request = BecomeMentor.LoadDataOnServer.Request(name: <#T##String?#>, discription: discriptionn, imageData: photoData, languages: <#T##[Languages]#>, messageLink: <#T##String?#>, shortDiscription: shortDiscriptionn)
-       //        interactor?.doSomething(request: request)
+        guard let photoData = selectedImageView.image?.pngData() else {return}
+        guard let shortDiscriptionn = shortDiscription.text, shortDiscriptionn != "", shortDiscriptionn != "Например: Senior IOS dev"  else {return}
+        guard let discriptionn = discription.text, discriptionn != "", discriptionn != "Например: Помогаю новичкам со входом в IT. Подскажу на счет резюме и проведу мок собес." else {return}
+        guard let name = name.text, name != "", name != "Например: Владимир" else {return}
+        guard arrayOfLanguages.count > 0 else {return}
+        guard let link = messageLink.text, link != "", link != "Например: https://t.me/escaping_closure" else {return}
+        let request = BecomeMentor.LoadDataOnServer.Request(name: name, discription: discriptionn, imageData: photoData, languages: arrayOfLanguages, messageLink: link, shortDiscription: shortDiscriptionn)
+               interactor?.loadInfoToFirebase(request: request)
     }
 
 }
@@ -238,6 +248,8 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
 extension BecomeMentorViewController{
     private func setConstraints() {
         hideKeyboardWhenTappedAround()
+        
+        if isBackButtonHidden == true {navigationItem.hidesBackButton = true}
 //        scrollView.delegate = self
 //        scrollView.contentSize = CGSize(width:self.view.frame.size.width, height: 1000)
 

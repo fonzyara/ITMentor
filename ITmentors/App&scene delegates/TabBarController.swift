@@ -54,7 +54,7 @@ extension TabBarController{
                 let feedViewController = MentorsScreenViewController()
                 return self.wrappedInNavigationController(with: feedViewController, title: $0.title)
             case .profile:
-                let profileViewController = BecomeMentorViewController()
+                let profileViewController = ProfileScreenViewController()
                 return self.wrappedInNavigationController(with: profileViewController, title: $0.title)
             }
         }

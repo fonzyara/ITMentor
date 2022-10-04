@@ -13,7 +13,8 @@
 import UIKit
 
 @objc protocol ProfileScreenRoutingLogic {
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
+    func navigateToSingInViewController(source: ProfileScreenViewController, destination: SignInWithAppleViewController)
+    func navigateToFillDataViewController(source: ProfileScreenViewController, destination: BecomeMentorViewController)
 }
 
 protocol ProfileScreenDataPassing {
@@ -41,12 +42,14 @@ class ProfileScreenRouter: NSObject, ProfileScreenRoutingLogic, ProfileScreenDat
     //  }
     //}
     
-    // MARK: Navigation
+    //MARK: Navigation
     
-    //func navigateToSomewhere(source: ProfileScreenViewController, destination: SomewhereViewController) {
-    //  source.show(destination, sender: nil)
-    //}
-    
+    func navigateToSingInViewController(source: ProfileScreenViewController, destination: SignInWithAppleViewController) {
+      source.show(destination, sender: nil)
+    }
+    func navigateToFillDataViewController(source: ProfileScreenViewController, destination: BecomeMentorViewController) {
+      source.show(destination, sender: nil)
+    }
     // MARK: Passing data
     
     //func passDataToSomewhere(source: ProfileScreenDataStore, destination: inout SomewhereDataStore) {

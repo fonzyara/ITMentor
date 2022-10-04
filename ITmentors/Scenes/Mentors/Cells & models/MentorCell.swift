@@ -34,7 +34,7 @@ class MentorCell: UITableViewCell, CellModelRepresentable {
         self.arrayOfLanguages = cellModel.languages
         nameLabel.text = cellModel.name
         discriptionLabel.text = cellModel.shortDiscription
-        mentorImageView.image = UIImage(data: cellModel.imageData!)
+        mentorImageView.image = UIImage(data: cellModel.imageData ?? Data())
         //        print("llll")
         addSubviews()
         addConstraints()

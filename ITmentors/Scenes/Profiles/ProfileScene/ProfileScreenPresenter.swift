@@ -21,9 +21,14 @@ class ProfileScreenPresenter: ProfileScreenPresentationLogic {
     weak var viewController: ProfileScreenDisplayLogic?
     
     // MARK: Do something
-    
     func presentSomething(response: ProfileScreen.Something.Response) {
-        let viewModel = ProfileScreen.Something.ViewModel(viewControllerWeNeedToShow: SelectLanguagesViewController())
-        viewController?.displaySomething(viewModel: viewModel)
+        var viewModel: ProfileScreen.Something.ViewModel?
+        if response.isSignedInWithApple == false {
+            viewModel = ProfileScreen.Something.ViewModel(viewControllerWeNeedToShow: SignInWithAppleViewController())
+        }
+        else if response.isYourInfoFilled == false {
+            viewModel = ProfileScreen.Something.ViewModel(viewControllerWeNeedToShow: BecomeMentorViewController())
+        }
+        viewController?.showAuthOrFillInfoScreen(viewModel: viewModel)
     }
 }

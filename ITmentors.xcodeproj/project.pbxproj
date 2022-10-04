@@ -27,6 +27,12 @@
 		17B49C5828E83C9D00AFC68E /* SelectLanguageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B49C5728E83C9D00AFC68E /* SelectLanguageViewModel.swift */; };
 		17CD8DCA28E4735900F0D1EE /* MentorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CD8DC928E4735900F0D1EE /* MentorCell.swift */; };
 		17CD8DCC28E47A5F00F0D1EE /* LanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CD8DCB28E47A5F00F0D1EE /* LanguageCell.swift */; };
+		17DB687D28EB4E8400BBCDDD /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 17DB687C28EB4E8400BBCDDD /* FirebaseAuth */; };
+		17DB687F28EB4E8400BBCDDD /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 17DB687E28EB4E8400BBCDDD /* FirebaseFirestore */; };
+		17DB688128EB4E8400BBCDDD /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 17DB688028EB4E8400BBCDDD /* FirebaseStorage */; };
+		17DB688328EB4F4F00BBCDDD /* CheckInternetConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB688228EB4F4F00BBCDDD /* CheckInternetConnection.swift */; };
+		17DB688528EB53C400BBCDDD /* SignInWithAppleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB688428EB53C400BBCDDD /* SignInWithAppleViewController.swift */; };
+		17DB688728EB5C0700BBCDDD /* SignInWithAppleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB688628EB5C0700BBCDDD /* SignInWithAppleViewModel.swift */; };
 		17E6798528E3766B00B140B5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17E6798328E3766B00B140B5 /* Main.storyboard */; };
 		17E6798728E3766D00B140B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17E6798628E3766D00B140B5 /* Assets.xcassets */; };
 		17E6798A28E3766D00B140B5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17E6798828E3766D00B140B5 /* LaunchScreen.storyboard */; };
@@ -76,6 +82,10 @@
 		17B49C5728E83C9D00AFC68E /* SelectLanguageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLanguageViewModel.swift; sourceTree = "<group>"; };
 		17CD8DC928E4735900F0D1EE /* MentorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentorCell.swift; sourceTree = "<group>"; };
 		17CD8DCB28E47A5F00F0D1EE /* LanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageCell.swift; sourceTree = "<group>"; };
+		17DB688228EB4F4F00BBCDDD /* CheckInternetConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInternetConnection.swift; sourceTree = "<group>"; };
+		17DB688428EB53C400BBCDDD /* SignInWithAppleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleViewController.swift; sourceTree = "<group>"; };
+		17DB688628EB5C0700BBCDDD /* SignInWithAppleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleViewModel.swift; sourceTree = "<group>"; };
+		17DB688928EB5E8900BBCDDD /* ITmentors.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ITmentors.entitlements; sourceTree = "<group>"; };
 		17E6797A28E3766B00B140B5 /* ITmentors.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ITmentors.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17E6798428E3766B00B140B5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		17E6798628E3766D00B140B5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -114,6 +124,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				715474AF4F52CE8845735198 /* Pods_ITmentors.framework in Frameworks */,
+				17DB688128EB4E8400BBCDDD /* FirebaseStorage in Frameworks */,
+				17DB687D28EB4E8400BBCDDD /* FirebaseAuth in Frameworks */,
+				17DB687F28EB4E8400BBCDDD /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,6 +182,7 @@
 				17E679D528E379E400B140B5 /* ProfileScreenRouter.swift */,
 				17E679D628E379E400B140B5 /* ProfileScreenModels.swift */,
 				17F5A95A28EB318C002546EF /* ProfileScreenConfigurator.swift */,
+				17DB688828EB5C1200BBCDDD /* SignInScreen */,
 			);
 			path = ProfileScene;
 			sourceTree = "<group>";
@@ -197,6 +211,15 @@
 			path = MentorsListScene;
 			sourceTree = "<group>";
 		};
+		17DB688828EB5C1200BBCDDD /* SignInScreen */ = {
+			isa = PBXGroup;
+			children = (
+				17DB688428EB53C400BBCDDD /* SignInWithAppleViewController.swift */,
+				17DB688628EB5C0700BBCDDD /* SignInWithAppleViewModel.swift */,
+			);
+			path = SignInScreen;
+			sourceTree = "<group>";
+		};
 		17E6797128E3766B00B140B5 = {
 			isa = PBXGroup;
 			children = (
@@ -218,10 +241,11 @@
 		17E6797C28E3766B00B140B5 /* ITmentors */ = {
 			isa = PBXGroup;
 			children = (
+				17DB688928EB5E8900BBCDDD /* ITmentors.entitlements */,
+				17E679B828E378E500B140B5 /* App&scene delegates */,
 				17F5A95C28EB3F43002546EF /* GoogleService-Info.plist */,
 				17E679BF28E3795100B140B5 /* Helpers */,
 				17E679C428E379A200B140B5 /* Scenes */,
-				17E679B828E378E500B140B5 /* App&scene delegates */,
 				17E6798328E3766B00B140B5 /* Main.storyboard */,
 				17E6798628E3766D00B140B5 /* Assets.xcassets */,
 				17E6798828E3766D00B140B5 /* LaunchScreen.storyboard */,
@@ -244,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				17E679C028E3796D00B140B5 /* UIColor + hex.swift */,
+				17DB688228EB4F4F00BBCDDD /* CheckInternetConnection.swift */,
 				17E679C228E3798200B140B5 /* AppColors.swift */,
 				17174B3628E4DF4700C7BD3C /* UIColor + gradient.swift */,
 				17174B5528E6F55E00C7BD3C /* UIViewController + endEditing.swift */,
@@ -314,6 +339,11 @@
 			dependencies = (
 			);
 			name = ITmentors;
+			packageProductDependencies = (
+				17DB687C28EB4E8400BBCDDD /* FirebaseAuth */,
+				17DB687E28EB4E8400BBCDDD /* FirebaseFirestore */,
+				17DB688028EB4E8400BBCDDD /* FirebaseStorage */,
+			);
 			productName = ITmentors;
 			productReference = 17E6797A28E3766B00B140B5 /* ITmentors.app */;
 			productType = "com.apple.product-type.application";
@@ -343,6 +373,9 @@
 				Base,
 			);
 			mainGroup = 17E6797128E3766B00B140B5;
+			packageReferences = (
+				17DB687B28EB4E8400BBCDDD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 17E6797B28E3766B00B140B5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -442,12 +475,15 @@
 				17174B5228E6D93300C7BD3C /* BecomeMentorViewController.swift in Sources */,
 				17174B4328E5754700C7BD3C /* DetailedMentorRouter.swift in Sources */,
 				17174B5628E6F55E00C7BD3C /* UIViewController + endEditing.swift in Sources */,
+				17DB688528EB53C400BBCDDD /* SignInWithAppleViewController.swift in Sources */,
 				17174B3728E4DF4700C7BD3C /* UIColor + gradient.swift in Sources */,
+				17DB688728EB5C0700BBCDDD /* SignInWithAppleViewModel.swift in Sources */,
 				17E679D028E379B200B140B5 /* MentorsScreenInteractor.swift in Sources */,
 				17174B4628E5754700C7BD3C /* DetailedMentorInteractor.swift in Sources */,
 				17F5A95728EB3047002546EF /* DetailedMentorConfigurator.swift in Sources */,
 				17E679C328E3798200B140B5 /* AppColors.swift in Sources */,
 				17174B3928E566BA00C7BD3C /* LanguageModel.swift in Sources */,
+				17DB688328EB4F4F00BBCDDD /* CheckInternetConnection.swift in Sources */,
 				17E679CD28E379B200B140B5 /* MentorsScreenRouter.swift in Sources */,
 				17E679C128E3796D00B140B5 /* UIColor + hex.swift in Sources */,
 				17174B4528E5754700C7BD3C /* DetailedMentorViewController.swift in Sources */,
@@ -600,6 +636,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ITmentors/ITmentors.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M85PDP6HKH;
@@ -631,6 +668,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ITmentors/ITmentors.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M85PDP6HKH;
@@ -676,6 +714,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		17DB687B28EB4E8400BBCDDD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		17DB687C28EB4E8400BBCDDD /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 17DB687B28EB4E8400BBCDDD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		17DB687E28EB4E8400BBCDDD /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 17DB687B28EB4E8400BBCDDD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		17DB688028EB4E8400BBCDDD /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 17DB687B28EB4E8400BBCDDD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 17E6797228E3766B00B140B5 /* Project object */;
 }
