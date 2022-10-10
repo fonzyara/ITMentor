@@ -33,4 +33,23 @@ enum BecomeMentor {
             var isSuccesed: Bool?
         }
     }
+    enum TransferDataFromProfileToEditScreen{
+        struct Response {
+            var name: String?
+            var discription: String?
+            var imageData: Data?
+            var languages: [Languages]
+            var messageLink: String?
+            var shortDiscription: String?
+        }
+        
+        struct ViewModel {
+            var name: String?
+            var discription: String?
+            var imageData: Data?
+            var languages: [Languages]
+            var messageLink: String?
+            var shortDiscription: String?
+        }
+    }
 }

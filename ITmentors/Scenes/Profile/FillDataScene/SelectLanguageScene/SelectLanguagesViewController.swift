@@ -30,15 +30,15 @@ class SelectLanguagesViewController: UIViewController {
     }
     
     private let tableView: UITableView = {
-       let t = UITableView()
+        let t = UITableView()
         t.backgroundColor = .AppPalette.elementsColor
         t.separatorColor = .white
         t.separatorStyle = .singleLine
-       return t
+        return t
     }()
     
     private let label: UILabel = {
-      let l = UILabel()
+        let l = UILabel()
         l.text = "Языки программирования, которые вы используете"
         l.textColor = .white
         l.textAlignment = .center
@@ -54,16 +54,12 @@ class SelectLanguagesViewController: UIViewController {
         b.setTitle("Подтвердить", for: .normal)
         b.layer.cornerRadius = 10
         
-      return b
+        return b
     }()
     
     @objc func returnArrayOfLanguagesToPreviousScreen(){
-        print(123)
         navigationController?.viewControllers.removeLast()
-        
-//        dismiss(animated: true) { [viewModel] in
-//            print(1234)
-            self.returnArrayOfLanguagesToPreviousScreenDelegate?.getArray(array: viewModel?.arrayOfSelectedLanguages ?? [])
+        self.returnArrayOfLanguagesToPreviousScreenDelegate?.getArray(array: viewModel?.arrayOfSelectedLanguages ?? [])
         
     }
     

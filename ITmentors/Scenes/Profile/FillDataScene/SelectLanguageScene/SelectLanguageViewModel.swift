@@ -20,7 +20,6 @@ class  SelectLanguagesViewModel: SelectLanguagesViewModelProtocol {
     var arrayOfAllLanguages: [Languages] = Languages.allCases
 
     func appendToArray(cellIndexPathRow: Int){
-        print(cellIndexPathRow)
         arrayOfSelectedLanguages.append(arrayOfAllLanguages[cellIndexPathRow])
         print(arrayOfSelectedLanguages)
 
@@ -37,7 +36,6 @@ class  SelectLanguagesViewModel: SelectLanguagesViewModelProtocol {
                 break
             }
         }
-        print(arrayOfSelectedLanguages)
 
     }
 }

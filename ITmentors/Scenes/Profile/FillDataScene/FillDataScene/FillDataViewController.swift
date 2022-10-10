@@ -14,12 +14,20 @@ import UIKit
 
 protocol BecomeMentorDisplayLogic: AnyObject {
     func displayCompletion(viewModel: BecomeMentor.LoadDataOnServer.ViewModel)
+    func pasteDataFromProfile(viewMode: BecomeMentor.TransferDataFromProfileToEditScreen.ViewModel)
 }
 
 class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UINavigationControllerDelegate {
     var isBackButtonHidden = false
     var imagePicker = UIImagePickerController()
     var arrayOfLanguages: [Languages] = []
+    var isItDataEditingScreen = false{
+        didSet{
+            if isItDataEditingScreen == true{
+                interactor?.getYourInfo()
+            }
+        }
+    }
 
     var interactor: BecomeMentorBusinessLogic?
     var router: (NSObjectProtocol & BecomeMentorRoutingLogic & BecomeMentorDataPassing)?
@@ -39,10 +47,8 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.navigationController?.navigationBar.prefersLargeTitles = false
-        navigationItem.hidesBackButton = true
-
-        setConstraints()
+        navigationItem.hidesBackButton = isBackButtonHidden
+//        setConstraints()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -59,9 +65,11 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
  
 
     func displayCompletion(viewModel: BecomeMentor.LoadDataOnServer.ViewModel) {
-        print(viewModel.isSuccesed)
         if viewModel.isSuccesed == true{
             navigationController?.popToRootViewController(animated: true)
+//            if let rootVC = navigationController?.viewControllers.first as? ProfileScreenViewController{
+//                rootVC.loadYourData()
+//            }
         }
         else {
             let dialogMessage = UIAlertController(title: "Ошибка", message: "Не удалось загрузить данные на сервер. Попробуйте проверить сетевое соединение", preferredStyle: .alert)
@@ -71,7 +79,18 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         }
     }
 
+    func pasteDataFromProfile(viewMode: BecomeMentor.TransferDataFromProfileToEditScreen.ViewModel){
+        messageLink.text = viewMode.messageLink
+        name.text = viewMode.name
+        shortDiscription.text = viewMode.shortDiscription
+        discription.text = viewMode.discription
+        arrayOfLanguages = viewMode.languages
+        selectedImageView.image = UIImage(data: viewMode.imageData ?? Data())
+        setConstraints()
 
+        getArray(array: arrayOfLanguages)
+
+    }
 
 
     private let scrollView: UIScrollView = {
@@ -239,7 +258,7 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         guard arrayOfLanguages.count > 0 else {return}
         guard let link = messageLink.text, link != "", link != "Например: https://t.me/escaping_closure" else {return}
         let request = BecomeMentor.LoadDataOnServer.Request(name: name, discription: discriptionn, imageData: photoData, languages: arrayOfLanguages, messageLink: link, shortDiscription: shortDiscriptionn)
-               interactor?.loadInfoToFirebase(request: request)
+        interactor?.loadInfoToFirebase(request: request)
     }
 
 }
@@ -461,6 +480,7 @@ extension BecomeMentorViewController: UITextViewDelegate{
 //MARK: - TextFieldDelegate
 extension BecomeMentorViewController: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+
         textField.endEditing(false)
         return true
     }
@@ -490,7 +510,7 @@ extension BecomeMentorViewController: UITextFieldDelegate{
 extension BecomeMentorViewController: ReturnArrayOfLanguagesToPreviousScreenProtocol{
     func getArray(array: [Languages]) {
         arrayOfLanguages = array
-        print(arrayOfLanguages)
+//        guard arrayOfLanguages.count > 0 else {return}
         layoutCollectionView()
     }
 }
@@ -548,7 +568,7 @@ extension BecomeMentorViewController: UICollectionViewDelegateFlowLayout {
         let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
         let numberOfItems = CGFloat(collectionView.numberOfItems(inSection: section))
         let combinedItemWidth = (numberOfItems * flowLayout.itemSize.width) + ((numberOfItems - 1)  * flowLayout.minimumInteritemSpacing)
-        let padding = ((collectionView.frame.width - combinedItemWidth) / 2) - (combinedItemWidth / CGFloat(arrayOfLanguages.count)) + CGFloat(arrayOfLanguages.count) + 18
+        let padding = ((collectionView.frame.width - combinedItemWidth) / 2) - (combinedItemWidth / CGFloat(numberOfItems)) + CGFloat(numberOfItems) + 18
         return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
     }
 }

@@ -17,11 +17,8 @@ import Firebase
 
 class BecomeMentorWorker {
     func loadToFirebase(name: String?, description: String?, imageData: Data?, languages: [Languages], messageLink: String?, shortDescription: String?, completion: @escaping () -> (), error: @escaping () -> ()) {
-        print(1)
         guard let yourID = UserDefaults.standard.string(forKey: "ShortUUID") else {error(); return}
-        print(2)
         guard InternetConnectionManager.isConnectedToNetwork() == true else {error(); return}
-        print(3)
         let ref = Firestore.firestore().collection("Mentors").document(yourID)
         
         ref.setData([
@@ -31,21 +28,15 @@ class BecomeMentorWorker {
             "MessageLink": messageLink as Any,
         ], merge: true)
         let languageRef = ref.collection("Languages")
-//        languageRef.
-        print(4)
 
         for i in languages{
             let currectLanguageLink = languageRef.document(i.languageName)
-            currectLanguageLink.setData(["LanguageName": i.languageName], merge: true)
-            print(5)
+            currectLanguageLink.setData(["LanguageName": i.languageName], merge: false)
 
         }
-        
-        print(6)
 
         uploadImage(withImage: imageData, userID: yourID) {
             completion()
-            print(7)
             
         } error: {
             error()

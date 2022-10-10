@@ -57,33 +57,23 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
     // MARK: presenter
     func showMentorInfo(viewModel: DetailedMentor.ShowMentorInfo.ViewModel) {
         self.navigationItem.title = viewModel.name
-        setConstraints()
         guard let imageData = viewModel.imageData else {return}
         mentorImageView.image = UIImage(data: imageData)
         shortDiscriptionLabel.text = viewModel.shortDiscription
         messageLink = viewModel.messageLink ?? ""
         arrayOfLanguages = viewModel.languages
-        discriptionLabel.text = viewModel.discription
+        guard let discr = viewModel.discription else {return}
+        descriptionLabel.text = discr
         
         
         collectionViewOfLanguages.delegate = self
         collectionViewOfLanguages.dataSource = self
         collectionViewOfLanguages.register(LanguageCollectionViewCell.self, forCellWithReuseIdentifier: "LanguageCell")
+        
+        setConstraints()
+
     }
-    // MARK: Setup
-    private func setup() {
-        let viewController = self
-        let interactor = DetailedMentorInteractor()
-        let presenter = DetailedMentorPresenter()
-        let router = DetailedMentorRouter()
-        viewController.interactor = interactor
-        viewController.router = router
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
-    }
-    
+
     
     private let mentorImageView: UIImageView = {
         let iv = UIImageView()
@@ -104,18 +94,14 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
         l.lineBreakMode = .byWordWrapping
         l.adjustsFontSizeToFitWidth = true
         l.minimumScaleFactor = 0.5
-//        l.font = UIFont.systemFont(ofSize: 15)
         return l
     }()
-    private let discriptionLabel: UILabel = {
+    private let descriptionLabel: UILabel = {
         let l = UILabel()
         l.textColor = .white
         l.textAlignment = .center
         l.numberOfLines = 0
         l.lineBreakMode = .byWordWrapping
-//        l.adjustsFontSizeToFitWidth = true
-//        l.minimumScaleFactor = 0.5
-//        l.font = UIFont.systemFont(ofSize: 15)
         return l
     }()
     private let writeToMentorButton: UIButton = {
@@ -152,7 +138,7 @@ extension DetailedMentorViewController{
         view.addSubview(mentorImageView)
         view.addSubview(shortDiscriptionLabel)
         view.addSubview(collectionViewOfLanguages)
-        view.addSubview(discriptionLabel)
+        view.addSubview(descriptionLabel)
         view.addSubview(writeToMentorButton)
 
         
@@ -169,16 +155,22 @@ extension DetailedMentorViewController{
             make.right.equalToSuperview().offset(-30)
         }
         
-    
+        let screensize: CGRect = UIScreen.main.bounds
+        let itemsWidth = screensize.width * 0.9
+        var heigth = 0
+        //calculate collectionViewHeight
+        for i in 1...arrayOfLanguages.count + 1 {if i % 3 == 0{heigth += 35}}
+        if heigth == 0 {heigth = 30}
+        
         collectionViewOfLanguages.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(40)
             make.right.equalToSuperview().offset(-40)
-            make.height.equalTo(40)
+            make.height.equalTo(heigth)
             make.top.equalTo(shortDiscriptionLabel.snp.bottom).offset(10)
         }
         
         
-        discriptionLabel.snp.makeConstraints { make in
+        descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(collectionViewOfLanguages.snp.bottom).offset(10)
             make.height.greaterThanOrEqualTo(40.0)
             make.left.equalToSuperview().offset(30)
@@ -189,7 +181,7 @@ extension DetailedMentorViewController{
             make.left.equalToSuperview().offset(70)
             make.right.equalToSuperview().offset(-70)
             make.height.equalTo(40)
-            make.top.equalTo(discriptionLabel.snp.bottom).offset(30)
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(15)
         }
     }
 }
@@ -253,7 +245,7 @@ extension DetailedMentorViewController: UICollectionViewDelegateFlowLayout {
         let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
         let numberOfItems = CGFloat(collectionView.numberOfItems(inSection: section))
         let combinedItemWidth = (numberOfItems * flowLayout.itemSize.width) + ((numberOfItems - 1)  * flowLayout.minimumInteritemSpacing)
-        let padding = ((collectionView.frame.width - combinedItemWidth) / 2) - (combinedItemWidth / CGFloat(arrayOfLanguages.count)) + CGFloat(arrayOfLanguages.count) * 5
+        let padding = ((collectionView.frame.width - combinedItemWidth) / 2) - (combinedItemWidth / CGFloat(numberOfItems)) + CGFloat(numberOfItems) + 18
         return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
     }
 }

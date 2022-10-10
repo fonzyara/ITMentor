@@ -61,6 +61,5 @@ class MentorsScreenRouter: NSObject, MentorsScreenRoutingLogic, MentorsScreenDat
         destination.languages = withData.languages
         destination.messageLink = withData.messageLink
         destination.shortDiscription = withData.shortDiscription
-        
     }
 }

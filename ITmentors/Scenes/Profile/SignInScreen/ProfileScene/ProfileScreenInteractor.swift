@@ -14,6 +14,7 @@ import UIKit
 
 protocol ProfileScreenBusinessLogic {
     func showAuthScreenIfNeeded()
+    func getYourData()
 }
 
 protocol ProfileScreenDataStore {
@@ -21,6 +22,8 @@ protocol ProfileScreenDataStore {
 }
 
 class ProfileScreenInteractor: ProfileScreenBusinessLogic, ProfileScreenDataStore {
+    
+    
     
     var presenter: ProfileScreenPresentationLogic?
     var worker: ProfileScreenWorker?
@@ -31,11 +34,20 @@ class ProfileScreenInteractor: ProfileScreenBusinessLogic, ProfileScreenDataStor
     func showAuthScreenIfNeeded() {
         let isSignedInWithApple = UserDefaults.standard.bool(forKey: "isSignedInWithApple")
         let isInfoFilled = UserDefaults.standard.bool(forKey: "isInfoFilled")
-        print(isInfoFilled)
-        print(isSignedInWithApple)
-        let response = ProfileScreen.Something.Response(isSignedInWithApple: isSignedInWithApple, isYourInfoFilled: isInfoFilled)
+//        print(isInfoFilled)
+//        print(isSignedInWithApple)
+        let response = ProfileScreen.chekcAuthAndDataFill.Response(isSignedInWithApple: isSignedInWithApple, isYourInfoFilled: isInfoFilled)
         guard response.isSignedInWithApple != true || response.isYourInfoFilled != true else {return}
-        presenter?.presentSomething(response: response)
+        presenter?.presentAuthOrFillDataViewController(response: response)
+    }
+    func getYourData() {
+        let worker1 = ProfileScreenWorker()
+        worker1.loadYourData(completion: { response in
+            self.presenter?.showYourData(response: response)
+        }, error: {
+            print("инфо о юзере не получена ")
+        })
+
     }
     
 }

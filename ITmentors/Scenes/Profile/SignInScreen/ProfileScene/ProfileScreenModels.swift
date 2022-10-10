@@ -15,7 +15,7 @@ import UIKit
 enum ProfileScreen {
     // MARK: Use cases
     
-    enum Something {
+    enum chekcAuthAndDataFill {
         struct Response {
             var isSignedInWithApple: Bool?
             var isYourInfoFilled: Bool?
@@ -23,6 +23,26 @@ enum ProfileScreen {
         
         struct ViewModel {
             var viewControllerWeNeedToShow: UIViewController
+        }
+    }
+    
+    enum loadYourDataa{
+        struct Response {
+            var name: String?
+            var discription: String?
+            var imageData: Data?
+            var languages: [Languages] = []
+            var messageLink: String?
+            var shortDiscription: String?
+        }
+        
+        struct ViewModel {
+            var name: String?
+            var discription: String?
+            var imageData: Data?
+            var languages: [Languages] = []
+            var messageLink: String?
+            var shortDiscription: String?
         }
     }
 }

@@ -18,12 +18,11 @@ protocol MentorsScreenDisplayLogic: AnyObject {
 
 class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, ConstraintRelatableTarget {
     func displayMentorCells(viewModel: MentorsScreen.ShowMentorCells.ViewModel) {
-        rows = viewModel.rows
-        DispatchQueue.main.async { [unowned self] in
-            
-            spinner.removeFromSuperview()
-            makeTableViewConstraints(withTableViewHeigth: CGFloat(rows.count * 120))
-        }
+        self.rows = viewModel.rows
+        print("rows count: \(rows.count)")
+        spinner.removeFromSuperview()
+        addTableView(withTableViewHeigth: CGFloat(rows.count * 110))
+        mentorsCountLabel.text = "\(rows.count) mentors"
         return
     }
     
@@ -39,7 +38,6 @@ class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, 
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         MentorsListConfigurator.shared.configure(with: self)
         view.backgroundColor = .AppPalette.backgroundColor
-        interactor?.loadMentors()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -49,8 +47,7 @@ class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, 
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        addSubviews()
-        setConstraints()
+        interactor?.loadMentors()
     }
     
     private let tableViewOfMentors: UITableView = {
@@ -72,20 +69,23 @@ class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, 
         spinner.color = .white
     return spinner
     }()
-    
+    private let mentorsCountLabel: UILabel = {
+        let l = UILabel()
+        l.textColor = .darkGray
+        l.textAlignment = .center
+      return l
+    }()
     
 }
 
 
 extension MentorsScreenViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    
-        print(rows.count)
+        print("rowsss count \(rows.count)")
         return rows.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "MentorCell", for: indexPath) as! MentorCell
         let cellViewModel = rows[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: cellViewModel.cellIdentifier, for: indexPath) as! MentorCell
         cell.backgroundColor = .AppPalette.secondElementColor
@@ -95,7 +95,7 @@ extension MentorsScreenViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        120
+        110
     }
     
 }
@@ -103,14 +103,6 @@ extension MentorsScreenViewController: UITableViewDelegate, UITableViewDataSourc
 extension MentorsScreenViewController{
     private func addSubviews(){
         view.addSubview(spinner)
-        
-        tableViewOfMentors.delegate = self
-        tableViewOfMentors.dataSource = self
-        tableViewOfMentors.register(MentorCell.self, forCellReuseIdentifier: "MentorCell")
-        
-        view.addSubview(tableViewOfMentors)
-
-        
     }
     
     private func setConstraints(){
@@ -118,7 +110,14 @@ extension MentorsScreenViewController{
             make.centerX.centerY.equalToSuperview()
         }
     }
-    private func makeTableViewConstraints(withTableViewHeigth: CGFloat){
+    private func addTableView(withTableViewHeigth: CGFloat){
+        
+        tableViewOfMentors.delegate = self
+        tableViewOfMentors.dataSource = self
+        tableViewOfMentors.register(MentorCell.self, forCellReuseIdentifier: "MentorCell")
+        
+        view.addSubview(tableViewOfMentors)
+        view.addSubview(mentorsCountLabel)
         tableViewOfMentors.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(15)
             make.right.equalToSuperview().offset(-15)
@@ -126,12 +125,16 @@ extension MentorsScreenViewController{
             make.top.equalToSuperview().offset(30)
             make.height.equalTo(withTableViewHeigth)
         }
+        mentorsCountLabel.snp.makeConstraints { make in
+            make.top.equalTo(tableViewOfMentors.snp.bottom).offset(7)
+            make.centerX.equalToSuperview()
+        }
     }
 }
 
 extension MentorsScreenViewController: goToDetailedMentorScreenDelegateProtocol{
     func goToDetailedMentorScreen(withData: MentorsScreen.ShowMentorCells.ViewModel.MentorCellViewModel) {
-        print(123)
+    
         router?.navigateToDetailed(source: self, destination: DetailedMentorViewController(), withData: withData)
     }
 }

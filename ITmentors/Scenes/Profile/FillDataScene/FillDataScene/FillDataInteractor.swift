@@ -14,13 +14,26 @@ import UIKit
 
 protocol BecomeMentorBusinessLogic {
     func loadInfoToFirebase(request: BecomeMentor.LoadDataOnServer.Request)
+    func getYourInfo()
 }
 
 protocol BecomeMentorDataStore {
-    //var name: String { get set }
+    var name: String? {get set}
+    var discription: String? {get set}
+    var imageData: Data? {get set}
+    var languages: [Languages] {get set}
+    var messageLink: String? {get set}
+    var shortDiscription: String? {get set}
 }
 
 class BecomeMentorInteractor: BecomeMentorBusinessLogic, BecomeMentorDataStore {
+    var name: String?
+    var discription: String?
+    var imageData: Data?
+    var languages: [Languages] = []
+    var messageLink: String?
+    var shortDiscription: String?
+    
     
     var presenter: BecomeMentorPresentationLogic?
     var worker: BecomeMentorWorker?
@@ -35,16 +48,25 @@ class BecomeMentorInteractor: BecomeMentorBusinessLogic, BecomeMentorDataStore {
         let imageData = request.imageData
         let languages = request.languages
         let messageLink = request.messageLink
+        
         worker = BecomeMentorWorker()
         worker?.loadToFirebase(name: name, description: discription, imageData: imageData, languages: languages, messageLink: messageLink, shortDescription: shortDescription, completion: {
             let response = BecomeMentor.LoadDataOnServer.Response(isSuccesed: true)
-            self.presenter?.presentSomething(response: response)
-            UserDefaults.standard.set(true, forKey: "isInfoFilledC")
+            self.presenter?.presentIsSuccessed(response: response)
+            UserDefaults.standard.set(true, forKey: "isInfoFilled")
 
         }, error: {
             let response = BecomeMentor.LoadDataOnServer.Response(isSuccesed: false)
-            self.presenter?.presentSomething(response: response)
+            self.presenter?.presentIsSuccessed(response: response)
         })
 
     }
+    func getYourInfo(){
+        let response = BecomeMentor.TransferDataFromProfileToEditScreen.Response(name: name, discription: discription, imageData: imageData, languages: languages, messageLink: messageLink, shortDiscription: shortDiscription)
+
+        self.presenter?.presentYourData(response: response)
+        print(response)
+    }
+
+    
 }

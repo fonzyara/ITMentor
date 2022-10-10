@@ -30,10 +30,9 @@ struct MentorCellModel{
 
 enum MentorsScreen {
     // MARK: Use cases
-    ///
-    ///
-    ///
+    
     enum ShowMentorCells {
+        // из интерактора в презентер передадим массив экземпляров моделей ячейки
         struct Response {
             let mentorCellsData: [MentorCellModel]
         }
@@ -46,16 +45,13 @@ enum MentorsScreen {
                 let languages: [Languages]
                 let messageLink: String?
                 let shortDiscription: String?
-
-
+                
                 var cellIdentifier: String {
                     "MentorCell"
                 }
-                
                 var cellHeight: Double {
                     200
                 }
-                
                 init(cellData: MentorCellModel) {
                     name = cellData.name
                     discription = cellData.discription
@@ -69,7 +65,5 @@ enum MentorsScreen {
             let rows: [CellIdentifiable]
         }
     }
-    ///
-    ///
-    ///
+
 }

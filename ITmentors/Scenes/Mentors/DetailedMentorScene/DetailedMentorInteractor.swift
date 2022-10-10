@@ -40,9 +40,6 @@ class DetailedMentorInteractor: DetailedMentorBusinessLogic, DetailedMentorDataS
     // MARK: Do something
     
     func showMentorInfo() {
-        worker = DetailedMentorWorker()
-        worker?.doSomeWork()
-        
         var response = DetailedMentor.ShowMentorInfo.Response()
         response.languages = languages
         response.imageData = imageData

@@ -15,47 +15,51 @@ import FirebaseFirestore
 import FirebaseStorage
 import Firebase
 class MentorsScreenWorker {
-    func getMentorsList(completion: @escaping ([MentorCellModel]) -> (), error: @escaping () -> ()){
+    func getMentorsList(completionn: @escaping ([MentorCellModel]) -> (), error: @escaping () -> ()){
         var arrayOfMentors: [MentorCellModel] = []
         
         let ref = Firestore.firestore().collection("Mentors")
         
+        var arrayfOfDocsFromWhereWeNeedToGetMentorsInfo: [QueryDocumentSnapshot?] = []
+        
         ref.getDocuments { (documents, err) in
             guard err == nil else {error(); return}
-            guard let documents = documents else {error(); return}
-            
-            for doc in documents.documents{
-                let data = doc.data()
+            guard let documentss = documents else {error(); return}
+            arrayfOfDocsFromWhereWeNeedToGetMentorsInfo = documentss.documents
+            for docc in arrayfOfDocsFromWhereWeNeedToGetMentorsInfo{
+                guard let docc = docc else {return}
+                
+                let data = docc.data()
                 let name = data["Name"] as? String
                 let description = data["Description"] as? String
                 let shortDescription = data["ShortDescription"] as? String
                 let messageLink = data["MessageLink"] as? String
                 let appleUUID = data["AppleUUID"] as? String
-    
+                
                 var arrayOfLanguages: [Languages]?
-                self.loadLanguages(doc: doc) { languages in
+                self.loadLanguages(doc: docc) { languages in
                     arrayOfLanguages = languages
-                }
-                var imageData: Data?
-                self.loadImage(userID: appleUUID ?? "") { imgData in
-                    imageData = imgData
-                    let newMentor = MentorCellModel(name: name, discription: description, shortDiscription: shortDescription, imageData: imageData, languages: arrayOfLanguages ?? [], messageLink: messageLink)
-                
-                    arrayOfMentors.append(newMentor)
+                    print("hohohoh")
                     
-                    completion(arrayOfMentors)
-
+                    
+                    var imageData: Data?
+                    self.loadImage(userID: appleUUID ?? "") {imgData in
+                        imageData = imgData
+                        let newMentor = MentorCellModel(name: name, discription: description, shortDiscription: shortDescription, imageData: imageData, languages: arrayOfLanguages ?? [], messageLink: messageLink)
+                        print("languagessss: \(arrayOfLanguages)")
+                        arrayOfMentors.append(newMentor)
+                        
+                        guard let indexWeNeedToDelete = arrayfOfDocsFromWhereWeNeedToGetMentorsInfo.firstIndex(of: docc) else {return}
+                        arrayfOfDocsFromWhereWeNeedToGetMentorsInfo.remove(at: indexWeNeedToDelete)
+                        
+                        if arrayfOfDocsFromWhereWeNeedToGetMentorsInfo.count == 0 {
+                            completionn(arrayOfMentors)
+                        }
+                    }
                 }
-                
-
-
             }
-            
         }
-        
-        
     }
-    
     
     private func loadLanguages(doc: QueryDocumentSnapshot, completion: @escaping ([Languages]) -> ()){
         var arrayOfLanguages: [Languages] = []
@@ -68,11 +72,8 @@ class MentorsScreenWorker {
             for doc in documentss.documents{
                 let data = doc.data()
                 guard let languageName = data["LanguageName"] as? String else {return}
-                    
                 arrayOfLanguages.append(enumer.from(languageName))
-                print(arrayOfLanguages)
             }
-            print(arrayOfLanguages)
             completion(arrayOfLanguages)
         }
         
@@ -93,23 +94,3 @@ class MentorsScreenWorker {
     
 }
 
-class LanguageNameToEnumType{
-    func from(_ string: String) -> Languages{
-        switch string{
-        case "C++":
-            return .cPlusPlus
-        case "JS":
-            return .js
-        case "PHP":
-            return .php
-        case "Python":
-            return .python
-        case "Ruby":
-            return .ruby
-        case "Swift":
-            return .swift
-        default:
-            return .ruby
-        }
-    }
-}

@@ -12,9 +12,11 @@
 
 import UIKit
 
-@objc protocol ProfileScreenRoutingLogic {
+protocol ProfileScreenRoutingLogic {
     func navigateToSingInViewController(source: ProfileScreenViewController, destination: SignInWithAppleViewController)
     func navigateToFillDataViewController(source: ProfileScreenViewController, destination: BecomeMentorViewController)
+    func navigateToEditDataViewController(source: ProfileScreenViewController, destination: BecomeMentorViewController, withData: ProfileScreen.loadYourDataa.ViewModel)
+
 }
 
 protocol ProfileScreenDataPassing {
@@ -50,9 +52,23 @@ class ProfileScreenRouter: NSObject, ProfileScreenRoutingLogic, ProfileScreenDat
     func navigateToFillDataViewController(source: ProfileScreenViewController, destination: BecomeMentorViewController) {
       source.show(destination, sender: nil)
     }
+    func navigateToEditDataViewController(source: ProfileScreenViewController, destination: BecomeMentorViewController, withData: ProfileScreen.loadYourDataa.ViewModel) {
+        destination.isBackButtonHidden = false
+        destination.isItDataEditingScreen = true
+        guard var detailDS = destination.router?.dataStore else {return}
+        passDataToSomewhere(source: withData, destination: &detailDS)
+        destination.isBackButtonHidden = false
+        destination.isItDataEditingScreen = true
+    source.show(destination, sender: nil)
+}
     // MARK: Passing data
     
-    //func passDataToSomewhere(source: ProfileScreenDataStore, destination: inout SomewhereDataStore) {
-    //  destination.name = source.name
-    //}
+    func passDataToSomewhere(source: ProfileScreen.loadYourDataa.ViewModel, destination: inout BecomeMentorDataStore) {
+        destination.name = source.name
+        destination.languages = source.languages
+        destination.shortDiscription = source.shortDiscription
+        destination.discription = source.discription
+        destination.messageLink = source.messageLink
+        destination.imageData = source.imageData
+    }
 }
