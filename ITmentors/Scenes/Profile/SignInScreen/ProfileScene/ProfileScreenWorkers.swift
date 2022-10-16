@@ -32,6 +32,7 @@ class ProfileScreenWorker {
             let shortDescription = data["ShortDescription"] as? String
             let messageLink = data["MessageLink"] as? String
             let appleUUID = data["AppleUUID"] as? String
+            let isMentoring = data["IsMentoring"] as? Bool
             
             var arrayOfLanguages: [Languages] = []
             
@@ -42,7 +43,7 @@ class ProfileScreenWorker {
             var imageData: Data?
             self.loadImage(userID: appleUUID ?? "") { imgData in
                 imageData = imgData
-                let response: ProfileScreen.loadYourDataa.Response =  ProfileScreen.loadYourDataa.Response(name: name, discription: description, imageData: imageData, languages: arrayOfLanguages, messageLink: messageLink, shortDiscription: shortDescription)
+                let response: ProfileScreen.loadYourDataa.Response =  ProfileScreen.loadYourDataa.Response(name: name, discription: description, imageData: imageData, languages: arrayOfLanguages, messageLink: messageLink, shortDiscription: shortDescription, isMentoring: isMentoring)
                 
                 completion(response)
             }
@@ -75,6 +76,38 @@ class ProfileScreenWorker {
             guard error == nil else {return}
             guard let imageData = data else {return}
             completion(imageData)
+        }
+    }
+}
+
+class ChangeMentoringStatusWorker{
+    func change(completion: @escaping (_ changedTo: Bool) -> ()) {
+        guard let id = UserDefaults.standard.string(forKey: "ShortUUID") else {return}
+        let ref = Firestore.firestore().collection("Mentors").document(id)
+        
+        ref.getDocument { document, err in
+            guard err == nil else {return}
+            
+            let isMentoring = document?.get("IsMentoring") as? Bool?
+            print(isMentoring)
+            if isMentoring == true || isMentoring == nil {
+                ref.setData(["IsMentoring": false], merge: true)
+            } else{
+                ref.setData(["IsMentoring": true], merge: true)
+            }
+        }
+
+    }
+}
+
+class DeleteAccountWorker{
+    func delete(completion: @escaping () -> ()){
+        guard let id = UserDefaults.standard.string(forKey: "ShortUUID") else {return}
+        let ref = Firestore.firestore().collection("Mentors").document(id)
+        ref.delete(){_ in
+            UserDefaults.standard.set(false, forKey: "isSignedInWithApple")
+            UserDefaults.standard.set(false, forKey: "isInfoFilled")
+            completion()
         }
     }
 }

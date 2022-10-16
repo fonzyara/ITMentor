@@ -14,6 +14,7 @@ import UIKit
 
 protocol DetailedMentorBusinessLogic {
     func showMentorInfo()
+    func reportMentor(request: DetailedMentor.SendMentorReport.Request)
 }
 
 protocol DetailedMentorDataStore {
@@ -23,15 +24,19 @@ protocol DetailedMentorDataStore {
     var languages: [Languages] { get set}
     var messageLink: String? { get set}
     var shortDiscription: String? { get set}
+    var ShortUUID: String? {get set}
+
 }
 
 class DetailedMentorInteractor: DetailedMentorBusinessLogic, DetailedMentorDataStore {
+    
     var name: String?
     var discription: String?
     var imageData: Data?
     var languages: [Languages] = []
     var messageLink: String?
     var shortDiscription: String?
+    var ShortUUID: String?
     
     var presenter: DetailedMentorPresentationLogic?
     var worker: DetailedMentorWorker?
@@ -48,5 +53,17 @@ class DetailedMentorInteractor: DetailedMentorBusinessLogic, DetailedMentorDataS
         response.messageLink = messageLink
         response.shortDiscription = shortDiscription
         presenter?.presentMentorInfo(response: response)
+    }
+    
+    func reportMentor(request: DetailedMentor.SendMentorReport.Request) {
+        let worker = DetailedMentorWorker()
+        worker.sendReport(to: ShortUUID, with: request.reason ?? "") { [unowned self] in
+            let response = DetailedMentor.SendMentorReport.Response(isReportSucssfulSent: true)
+            presenter?.presentReportStatus(response: response)
+        } error: { [unowned self] in
+            let response = DetailedMentor.SendMentorReport.Response(isReportSucssfulSent: false)
+            presenter?.presentReportStatus(response: response)
+        }
+
     }
 }

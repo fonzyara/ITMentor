@@ -34,6 +34,7 @@ enum ProfileScreen {
             var languages: [Languages] = []
             var messageLink: String?
             var shortDiscription: String?
+            var isMentoring: Bool?
         }
         
         struct ViewModel {
@@ -43,6 +44,16 @@ enum ProfileScreen {
             var languages: [Languages] = []
             var messageLink: String?
             var shortDiscription: String?
+            var isMentoring: Bool?
+        }
+    }
+    
+    enum ChangeMentoringStatus{
+        struct Response{
+            var changedTo: Bool?
+        }
+        struct ViewModel{
+            var changedTo: Bool?
         }
     }
 }

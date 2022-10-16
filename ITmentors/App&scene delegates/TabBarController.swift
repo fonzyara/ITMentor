@@ -77,6 +77,7 @@ extension TabBarController{
         navigationBarAppearance.configureWithTransparentBackground()
         navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25) ]
         UINavigationBar.appearance().standardAppearance = navigationBarAppearance
+        navController.navigationBar.topItem?.title = title as? String
         UINavigationBar.appearance().isTranslucent = false
         
     

@@ -23,6 +23,8 @@ struct MentorCellModel{
     let imageData: Data?
     let languages: [Languages]
     let messageLink: String?
+    let ShortUUID: String?
+
 }
 
 
@@ -45,6 +47,8 @@ enum MentorsScreen {
                 let languages: [Languages]
                 let messageLink: String?
                 let shortDiscription: String?
+                let ShortUUID: String?
+
                 
                 var cellIdentifier: String {
                     "MentorCell"
@@ -59,6 +63,7 @@ enum MentorsScreen {
                     languages = cellData.languages
                     messageLink = cellData.messageLink
                     shortDiscription = cellData.shortDiscription
+                    ShortUUID = cellData.ShortUUID
                 }
             }
             

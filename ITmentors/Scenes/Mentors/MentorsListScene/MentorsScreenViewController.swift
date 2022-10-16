@@ -17,14 +17,6 @@ protocol MentorsScreenDisplayLogic: AnyObject {
 }
 
 class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, ConstraintRelatableTarget {
-    func displayMentorCells(viewModel: MentorsScreen.ShowMentorCells.ViewModel) {
-        self.rows = viewModel.rows
-        print("rows count: \(rows.count)")
-        spinner.removeFromSuperview()
-        addTableView(withTableViewHeigth: CGFloat(rows.count * 110))
-        mentorsCountLabel.text = "\(rows.count) mentors"
-        return
-    }
     
     private var rows: [CellIdentifiable] = []
 
@@ -48,6 +40,8 @@ class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, 
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor?.loadMentors()
+        addSubviews()
+        setConstraints()
     }
     
     private let tableViewOfMentors: UITableView = {
@@ -76,6 +70,13 @@ class MentorsScreenViewController: UIViewController, MentorsScreenDisplayLogic, 
       return l
     }()
     
+    func displayMentorCells(viewModel: MentorsScreen.ShowMentorCells.ViewModel) {
+        self.rows = viewModel.rows
+        spinner.removeFromSuperview()
+        addTableView(withTableViewHeigth: CGFloat(rows.count * 110))
+        mentorsCountLabel.text = "\(rows.count) mentors"
+        return
+    }
 }
 
 

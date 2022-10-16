@@ -14,55 +14,57 @@ import UIKit
 
 protocol DetailedMentorDisplayLogic: AnyObject {
     func showMentorInfo(viewModel: DetailedMentor.ShowMentorInfo.ViewModel)
+    func isReportSucssfulSentAlert(viewModel: DetailedMentor.SendMentorReport.ViewModel)
 }
 
 class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic {
-    
-  
     
     var interactor: DetailedMentorBusinessLogic?
     var router: (NSObjectProtocol & DetailedMentorRoutingLogic & DetailedMentorDataPassing)?
     
     var messageLink = ""
     var arrayOfLanguages: [Languages] = []
-    // MARK: Object lifecycle
     
+    
+    // MARK: lifecycle
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         DetailedMentorConfigurator.shared.configure(with: self)
-
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         DetailedMentorConfigurator.shared.configure(with: self)
-
     }
-    
-    // MARK: View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .AppPalette.backgroundColor
+        let reportButton = UIBarButtonItem(title: "Пожаловаться", style: .done, target: self, action: #selector(reportButtonTapped))
+        navigationItem.rightBarButtonItem = reportButton
         showMentorInfo()
     }
     
     
-    // MARK: interactor tasks
+    // MARK: - interactor tasks
     
     private func showMentorInfo() {
         interactor?.showMentorInfo()
     }
     
-    // MARK: presenter
+    private func sendReport(with reason: String){
+        let request = DetailedMentor.SendMentorReport.Request(reason: reason)
+        interactor?.reportMentor(request: request)
+    }
+    // MARK: -  presenter
     func showMentorInfo(viewModel: DetailedMentor.ShowMentorInfo.ViewModel) {
         self.navigationItem.title = viewModel.name
         guard let imageData = viewModel.imageData else {return}
+        guard let discr = viewModel.discription else {return}
         mentorImageView.image = UIImage(data: imageData)
         shortDiscriptionLabel.text = viewModel.shortDiscription
         messageLink = viewModel.messageLink ?? ""
         arrayOfLanguages = viewModel.languages
-        guard let discr = viewModel.discription else {return}
         descriptionLabel.text = discr
         
         
@@ -71,9 +73,19 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
         collectionViewOfLanguages.register(LanguageCollectionViewCell.self, forCellWithReuseIdentifier: "LanguageCell")
         
         setConstraints()
-
+        
     }
-
+    
+    func isReportSucssfulSentAlert(viewModel: DetailedMentor.SendMentorReport.ViewModel){
+        if viewModel.isReportSucssfulSent == true {
+            
+        } else {
+            
+        }
+        
+    }
+    
+    
     
     private let mentorImageView: UIImageView = {
         let iv = UIImageView()
@@ -110,7 +122,7 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
         b.addTarget(self, action: #selector(writeMentor), for: .touchUpInside)
         b.setTitle("Связаться с ментором", for: .normal)
         b.layer.cornerRadius = 10
-       return b
+        return b
     }()
     
     @objc private func writeMentor(){
@@ -124,13 +136,31 @@ class DetailedMentorViewController: UIViewController, DetailedMentorDisplayLogic
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 6
-//        layout.
+        //        layout.
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
-       return collectionView
+        return collectionView
     }()
+    
+    @objc func reportButtonTapped(){
+        let alert = UIAlertController(title: "Пожаловаться на ментора", message: nil, preferredStyle: .actionSheet)
+        
+//        alert.setValue(NSAttributedString(string: alert.message!, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17), NSAttributedString.Key.foregroundColor : UIColor.green]), forKey: "attributedMessage")
+        alert.view.tintColor = .systemBlue
+
+        alert.addAction(UIAlertAction(title: "Ссылка для связи недействительна", style: .default , handler:{ [unowned self] actionn in
+            sendReport(with: "Ссылка для связи недействительна")
+        }))
+        alert.addAction(UIAlertAction(title: "Ментор долго не отвечает", style: .default , handler:{ [unowned self] actionn in
+            sendReport(with: "Ментор долго не отвечает")
+        }))
+        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel))
+        present(alert, animated: true)
+    }
+    
 }
+
 
 
 extension DetailedMentorViewController{
@@ -155,17 +185,17 @@ extension DetailedMentorViewController{
             make.right.equalToSuperview().offset(-30)
         }
         
-        let screensize: CGRect = UIScreen.main.bounds
-        let itemsWidth = screensize.width * 0.9
-        var heigth = 0
-        //calculate collectionViewHeight
-        for i in 1...arrayOfLanguages.count + 1 {if i % 3 == 0{heigth += 35}}
-        if heigth == 0 {heigth = 30}
+//        let screensize: CGRect = UIScreen.main.bounds
+//        let itemsWidth = screensize.width * 0.9
+//        var heigth = 0
+//        //calculate collectionViewHeight
+//        for i in 1...arrayOfLanguages.count + 1 {if i % 3 == 0{heigth += 35}}
+//        if heigth == 0 {heigth = 30}
         
         collectionViewOfLanguages.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(40)
             make.right.equalToSuperview().offset(-40)
-            make.height.equalTo(heigth)
+            make.height.equalTo(30)
             make.top.equalTo(shortDiscriptionLabel.snp.bottom).offset(10)
         }
         

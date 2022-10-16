@@ -15,10 +15,12 @@ import UIKit
 protocol ProfileScreenDisplayLogic: AnyObject {
     func showAuthOrFillInfoScreen(viewModel: ProfileScreen.chekcAuthAndDataFill.ViewModel?)
     func loadYourInfo(viewModel: ProfileScreen.loadYourDataa.ViewModel)
+    func accountMentoringStatusChanges(viewModel: ProfileScreen.ChangeMentoringStatus.ViewModel)
+    func accountDeleted()
+    
 }
 
 class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
-    
     
     var data: ProfileScreen.loadYourDataa.ViewModel?
     
@@ -30,7 +32,6 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         ProfileMentorConfigurator.shared.configure(with: self)
-        print("              sdfsdfs")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -39,31 +40,43 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
     }
     
     // MARK: View lifecycle
-
+    
     override func loadView() {
         super.loadView()
         view.backgroundColor = .AppPalette.backgroundColor
         loadYourData()
         showRegistationScreenIfNeeded()
+        
     }
     override func viewDidAppear(_ animated: Bool) {
         let menuButtonImage = UIImage(systemName: "gear")
-            let menuButton = UIBarButtonItem(image: menuButtonImage, style: .plain, target: self, action: #selector(goToEditDataScreen))
-            navigationItem.rightBarButtonItem = menuButton
+        let menuButton = UIBarButtonItem(image: menuButtonImage, style: .plain, target: self, action: #selector(showActionsSheet))
+        navigationItem.rightBarButtonItem = menuButton
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         yourImageView.layer.cornerRadius = yourImageView.bounds.width / 2
     }
-    func loadYourData(){
+    
+    
+    // MARK: To interactor
+    private func loadYourData(){
         addSpinner()
         interactor?.getYourData()
     }
-    // MARK: Do something
+    
     private func showRegistationScreenIfNeeded() {
         interactor?.showAuthScreenIfNeeded()
     }
+    private func deleteAccount(){
+        interactor?.deleteAccount()
+    }
+    private func changeMentoringStatus(){
+        interactor?.changeMentoringStatus()
+    }
     
+    //MARK: - from presenter
     func showAuthOrFillInfoScreen(viewModel: ProfileScreen.chekcAuthAndDataFill.ViewModel?) {
         guard let vcWeNeedToShow = viewModel?.viewControllerWeNeedToShow else {return}
         if vcWeNeedToShow is SignInWithAppleViewController {
@@ -72,20 +85,26 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
         else if vcWeNeedToShow is BecomeMentorViewController {
             router?.navigateToFillDataViewController(source: self, destination: vcWeNeedToShow as! BecomeMentorViewController)
         }
-        
-        
     }
+    
     func loadYourInfo(viewModel: ProfileScreen.loadYourDataa.ViewModel) {
         data = viewModel
         yourImageView.image = UIImage(data: data?.imageData ?? Data())
         nameLabel.text = data?.name
         shortDescriptionLabel.text = data?.shortDiscription
-        descriptionLabel.text = "О себе: \(String(describing: data?.discription) )"
+        descriptionLabel.text = "О себе: \(data?.discription ?? "")"
         messageLinkLabel.text = data?.messageLink
         
         addSubviewss()
         setConstraints()
         spinner.removeFromSuperview()
+    }
+    func accountMentoringStatusChanges(viewModel: ProfileScreen.ChangeMentoringStatus.ViewModel) {
+        data?.isMentoring = viewModel.changedTo
+    }
+    
+    func accountDeleted() {
+        showRegistationScreenIfNeeded()
     }
     
     private let yourImageView: UIImageView = {
@@ -148,11 +167,11 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
-       return collectionView
+        return collectionView
     }()
     
     private let editProfileButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(goToEditDataScreen))
+        let b = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(showActionsSheet))
         b.tintColor = .AppPalette.secondElementColor
         
         return b
@@ -162,12 +181,45 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
         spinner.translatesAutoresizingMaskIntoConstraints = false
         spinner.startAnimating()
         spinner.color = .white
-    return spinner
+        return spinner
     }()
-    @objc private func goToEditDataScreen(){
-        let editVC = BecomeMentorViewController()
-        router?.navigateToEditDataViewController(source: self, destination: editVC, withData: data!)
+    @objc private func showActionsSheet(){
+        var currectMentoringStatusText: String {
+            if data?.isMentoring == true || data?.isMentoring == nil{
+                return "Прекратить менторство"
+            } else {
+                return "Продолжить менторство"
+            }
+        }
+        var currectMentoringStatusStyle: UIAlertAction.Style{
+            if data?.isMentoring == true || data?.isMentoring == nil{
+                return .destructive
+            } else {
+                return .default
+            }
+        }
+    
+        
+        let alert = UIAlertController(title: "Настройки", message: "", preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Изменить информацию", style: .default , handler:{ [unowned self] actionn in
+            let editVC = BecomeMentorViewController()
+            guard let data = data else {return}
+            router?.navigateToEditDataViewController(source: self, destination: editVC, withData: data)
+        }))
+        alert.addAction(UIAlertAction(title: currectMentoringStatusText, style: currectMentoringStatusStyle , handler:{ [unowned self] actionn in
+            changeMentoringStatus()
+        }))
+        alert.addAction(UIAlertAction(title: "Удалить аккаунт", style: .destructive , handler:{ [unowned self] actionn in
+            deleteAccount()
+        }))
+        alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
+        
+        present(alert, animated: true)
     }
+    
+    
+    
 }
 
 extension ProfileScreenViewController{
@@ -203,16 +255,16 @@ extension ProfileScreenViewController{
             make.height.equalTo(30)
             make.centerX.equalToSuperview()
         }
-        let screensize: CGRect = UIScreen.main.bounds
-        let itemsWidth = screensize.width * 0.9
-        var heigth = 0
-        //calculate collectionViewHeight
-        for i in 1...(data?.languages.count ?? 0) + 1 {if i % 3 == 0{heigth += 35}}
-        if heigth == 0 {heigth = 30}
+//        let screensize: CGRect = UIScreen.main.bounds
+//        let itemsWidth = screensize.width * 0.9
+//        var heigth = 0
+//        //calculate collectionViewHeight
+//        for i in 1...(data?.languages.count ?? 0) + 1 {if i % 3 == 0{heigth += 35}}
+//        if heigth == 0 {heigth = 30}
         collectionViewOfLanguages.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(40)
             make.right.equalToSuperview().offset(-40)
-            make.height.equalTo(heigth)
+            make.height.equalTo(30)
             make.top.equalTo(shortDescriptionLabel.snp.bottom).offset(10)
         }
         descriptionLabel.snp.makeConstraints { make in

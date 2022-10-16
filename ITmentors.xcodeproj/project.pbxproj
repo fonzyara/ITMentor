@@ -22,6 +22,7 @@
 		17174B5228E6D93300C7BD3C /* FillDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B4C28E6D93300C7BD3C /* FillDataViewController.swift */; };
 		17174B5328E6D93300C7BD3C /* FillDataInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B4D28E6D93300C7BD3C /* FillDataInteractor.swift */; };
 		17174B5628E6F55E00C7BD3C /* UIViewController + endEditing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17174B5528E6F55E00C7BD3C /* UIViewController + endEditing.swift */; };
+		176B532228F6826600390D71 /* CheckIfStringIsLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176B532128F6826600390D71 /* CheckIfStringIsLink.swift */; };
 		17B49C5428E8176800AFC68E /* SelectLanguagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B49C5328E8176800AFC68E /* SelectLanguagesViewController.swift */; };
 		17B49C5628E8183900AFC68E /* LanguageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B49C5528E8183900AFC68E /* LanguageTableViewCell.swift */; };
 		17B49C5828E83C9D00AFC68E /* SelectLanguageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B49C5728E83C9D00AFC68E /* SelectLanguageViewModel.swift */; };
@@ -78,6 +79,7 @@
 		17174B4C28E6D93300C7BD3C /* FillDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillDataViewController.swift; sourceTree = "<group>"; };
 		17174B4D28E6D93300C7BD3C /* FillDataInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillDataInteractor.swift; sourceTree = "<group>"; };
 		17174B5528E6F55E00C7BD3C /* UIViewController + endEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + endEditing.swift"; sourceTree = "<group>"; };
+		176B532128F6826600390D71 /* CheckIfStringIsLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckIfStringIsLink.swift; sourceTree = "<group>"; };
 		17B49C5328E8176800AFC68E /* SelectLanguagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLanguagesViewController.swift; sourceTree = "<group>"; };
 		17B49C5528E8183900AFC68E /* LanguageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageTableViewCell.swift; sourceTree = "<group>"; };
 		17B49C5728E83C9D00AFC68E /* SelectLanguageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLanguageViewModel.swift; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 				17174B3628E4DF4700C7BD3C /* UIColor + gradient.swift */,
 				17174B5528E6F55E00C7BD3C /* UIViewController + endEditing.swift */,
 				17DB688A28ECCFC200BBCDDD /* LanguageNameToEnumType.swift */,
+				176B532128F6826600390D71 /* CheckIfStringIsLink.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -496,6 +499,7 @@
 				17F5A95728EB3047002546EF /* DetailedMentorConfigurator.swift in Sources */,
 				17E679C328E3798200B140B5 /* AppColors.swift in Sources */,
 				17174B3928E566BA00C7BD3C /* LanguageModel.swift in Sources */,
+				176B532228F6826600390D71 /* CheckIfStringIsLink.swift in Sources */,
 				17DB688328EB4F4F00BBCDDD /* CheckInternetConnection.swift in Sources */,
 				17E679CD28E379B200B140B5 /* MentorsScreenRouter.swift in Sources */,
 				17E679C128E3796D00B140B5 /* UIColor + hex.swift in Sources */,

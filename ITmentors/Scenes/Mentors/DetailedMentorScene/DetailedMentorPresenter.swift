@@ -14,6 +14,7 @@ import UIKit
 
 protocol DetailedMentorPresentationLogic {
     func presentMentorInfo(response: DetailedMentor.ShowMentorInfo.Response)
+    func presentReportStatus(response: DetailedMentor.SendMentorReport.Response)
 }
 
 class DetailedMentorPresenter: DetailedMentorPresentationLogic {
@@ -31,5 +32,10 @@ class DetailedMentorPresenter: DetailedMentorPresentationLogic {
         viewModel.messageLink = response.messageLink
         viewModel.shortDiscription = response.shortDiscription
         viewController?.showMentorInfo(viewModel: viewModel)
+    }
+    
+    func presentReportStatus(response: DetailedMentor.SendMentorReport.Response) {
+        let viewModel = DetailedMentor.SendMentorReport.ViewModel(isReportSucssfulSent: response.isReportSucssfulSent)
+        viewController?.isReportSucssfulSentAlert(viewModel: viewModel)
     }
 }

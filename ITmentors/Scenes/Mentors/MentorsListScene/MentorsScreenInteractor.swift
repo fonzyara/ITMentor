@@ -31,7 +31,6 @@ class MentorsScreenInteractor: MentorsScreenBusinessLogic, MentorsScreenDataStor
         worker = MentorsScreenWorker()
         worker?.getMentorsList(completionn: { mentorsArray in
             //если успешно получены данные
-            
             let response = MentorsScreen.ShowMentorCells.Response(mentorCellsData: mentorsArray)
             self.presenter?.presentMentors(response: response)
         }, error: {

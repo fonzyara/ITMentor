@@ -251,12 +251,14 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         router?.navigateToSomewhere(source: self, destination: selectLanguagesVC)
     }
     @objc private func confirm(){
-        guard let photoData = selectedImageView.image?.pngData() else {return}
-        guard let shortDiscriptionn = shortDiscription.text, shortDiscriptionn != "", shortDiscriptionn != "Например: Senior IOS dev"  else {return}
-        guard let discriptionn = discription.text, discriptionn != "", discriptionn != "Например: Помогаю новичкам со входом в IT. Подскажу на счет резюме и проведу мок собес." else {return}
-        guard let name = name.text, name != "", name != "Например: Владимир" else {return}
-        guard arrayOfLanguages.count > 0 else {return}
-        guard let link = messageLink.text, link != "", link != "Например: https://t.me/escaping_closure" else {return}
+        guard let photoData = selectedImageView.image?.pngData(), let shortDiscriptionn = shortDiscription.text, shortDiscriptionn != "", shortDiscriptionn != "Например: Senior IOS dev", let discriptionn = discription.text, discriptionn != "", discriptionn != "Например: Помогаю новичкам со входом в IT. Подскажу на счет резюме и проведу мок собес.", let name = name.text, name != "", name != "Например: Владимир", arrayOfLanguages.count > 0, let link = messageLink.text, link != "", link != "Например: https://t.me/escaping_closure" else {
+            // if not okey
+            let alert = UIAlertController(title: "Не все поля запонены", message: "Необходимо, чтобы все поля были заполнены и языки программироавния были выбраны.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Что ж", style: .cancel))
+            present(alert, animated: true)
+            return}
+        
+        //if okey
         let request = BecomeMentor.LoadDataOnServer.Request(name: name, discription: discriptionn, imageData: photoData, languages: arrayOfLanguages, messageLink: link, shortDiscription: shortDiscriptionn)
         interactor?.loadInfoToFirebase(request: request)
     }
@@ -280,7 +282,7 @@ extension BecomeMentorViewController{
         let imageViewWidth = screensize.width * 0.6
         let itemsWidth = screensize.width * 0.85
 
-        scrollView.contentSize = CGSize(width: screensize.width, height: 2000)
+        scrollView.contentSize = CGSize(width: screensize.width, height: 900)
 
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
@@ -485,7 +487,18 @@ extension BecomeMentorViewController: UITextFieldDelegate{
         return true
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
-//        textField.textColor = .darkGray
+        if textField == messageLink{
+            let linkChecker = CheckerIfStringIsLink()
+            guard let text = textField.text else {return}
+            let isLink = linkChecker.check(text)
+            if isLink == false{
+                textField.text = ""
+                let alert = UIAlertController(title: "Недействительная ссылка", message: "Проверьте правильность введенной ссылки, она должна начинаться с https://", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "Что ж :(", style: .cancel)
+                alert.addAction(ok)
+                present(alert, animated: true)
+            }
+        }
     }
     func textFieldDidBeginEditing(_ textField: UITextField) {
         switch textField{

@@ -15,9 +15,12 @@ import UIKit
 protocol ProfileScreenPresentationLogic {
     func presentAuthOrFillDataViewController(response: ProfileScreen.chekcAuthAndDataFill.Response)
     func showYourData(response: ProfileScreen.loadYourDataa.Response)
+    func accountDeleted()
+    func accountMentoringStatusChanges(response: ProfileScreen.ChangeMentoringStatus.Response)
 }
 
 class ProfileScreenPresenter: ProfileScreenPresentationLogic {
+    
     func showYourData(response: ProfileScreen.loadYourDataa.Response) {
         var viewModel = ProfileScreen.loadYourDataa.ViewModel()
         viewModel.imageData = response.imageData
@@ -26,6 +29,7 @@ class ProfileScreenPresenter: ProfileScreenPresentationLogic {
         viewModel.languages = response.languages
         viewModel.discription = response.discription
         viewModel.shortDiscription = response.shortDiscription
+        viewModel.isMentoring = response.isMentoring
         viewController?.loadYourInfo(viewModel: viewModel)
     }
     
@@ -42,5 +46,16 @@ class ProfileScreenPresenter: ProfileScreenPresentationLogic {
             viewModel = ProfileScreen.chekcAuthAndDataFill.ViewModel(viewControllerWeNeedToShow: BecomeMentorViewController())
         }
         viewController?.showAuthOrFillInfoScreen(viewModel: viewModel)
+    }
+    
+    
+    func accountDeleted() {
+        viewController?.accountDeleted()
+    }
+    
+    func accountMentoringStatusChanges(response: ProfileScreen.ChangeMentoringStatus.Response) {
+        guard let to = response.changedTo else {return}
+        let viewModel = ProfileScreen.ChangeMentoringStatus.ViewModel(changedTo: to)
+        viewController?.accountMentoringStatusChanges(viewModel: viewModel)
     }
 }

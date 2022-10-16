@@ -30,12 +30,14 @@ class MentorsScreenWorker {
                 guard let docc = docc else {return}
                 
                 let data = docc.data()
+                //should be minimun one mentor
+                let isMentoring = data["IsMentoring"] as? Bool?
                 let name = data["Name"] as? String
                 let description = data["Description"] as? String
                 let shortDescription = data["ShortDescription"] as? String
                 let messageLink = data["MessageLink"] as? String
                 let appleUUID = data["AppleUUID"] as? String
-                
+                let ShortUUID = data["AppleUUID"] as? String
                 var arrayOfLanguages: [Languages]?
                 self.loadLanguages(doc: docc) { languages in
                     arrayOfLanguages = languages
@@ -45,9 +47,13 @@ class MentorsScreenWorker {
                     var imageData: Data?
                     self.loadImage(userID: appleUUID ?? "") {imgData in
                         imageData = imgData
-                        let newMentor = MentorCellModel(name: name, discription: description, shortDiscription: shortDescription, imageData: imageData, languages: arrayOfLanguages ?? [], messageLink: messageLink)
-                        print("languagessss: \(arrayOfLanguages)")
-                        arrayOfMentors.append(newMentor)
+                        //adding mentor if he is mentoring
+                        if isMentoring != false  {
+                            let newMentor = MentorCellModel(name: name, discription: description, shortDiscription: shortDescription, imageData: imageData, languages: arrayOfLanguages ?? [], messageLink: messageLink, ShortUUID: ShortUUID)
+                            arrayOfMentors.append(newMentor)
+
+                        }
+
                         
                         guard let indexWeNeedToDelete = arrayfOfDocsFromWhereWeNeedToGetMentorsInfo.firstIndex(of: docc) else {return}
                         arrayfOfDocsFromWhereWeNeedToGetMentorsInfo.remove(at: indexWeNeedToDelete)

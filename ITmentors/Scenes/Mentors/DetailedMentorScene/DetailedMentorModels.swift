@@ -31,6 +31,7 @@ enum DetailedMentor {
             var languages: [Languages] = []
             var messageLink: String?
             var shortDiscription: String?
+            var ShortUUID: String?
         }
         
         struct ViewModel {
@@ -39,7 +40,23 @@ enum DetailedMentor {
             var imageData: Data?
             var languages: [Languages] = []
             var messageLink: String?
-            var shortDiscription: String? 
+            var shortDiscription: String?
+            var ShortUUID: String?
         }
+    }
+    
+    
+    enum SendMentorReport{
+        struct Request{
+            var reason: String?
+        }
+        struct Response{
+            var isReportSucssfulSent: Bool?
+        }
+        
+        struct ViewModel{
+            var isReportSucssfulSent: Bool?
+        }
+        
     }
 }
