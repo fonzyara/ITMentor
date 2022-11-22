@@ -26,77 +26,50 @@ class MentorsScreenWorker {
             guard err == nil else {error(); return}
             guard let documentss = documents else {error(); return}
             arrayfOfDocsFromWhereWeNeedToGetMentorsInfo = documentss.documents
-            for docc in arrayfOfDocsFromWhereWeNeedToGetMentorsInfo{
-                guard let docc = docc else {return}
+            
+            let numberOfMentors = documentss.count
+            
+            for (int, docc) in arrayfOfDocsFromWhereWeNeedToGetMentorsInfo.enumerated(){
+                guard let docc = docc else {continue}
                 
                 let data = docc.data()
-                //should be minimun one mentor
+//                should be minimun one mentor
                 let isMentoring = data["IsMentoring"] as? Bool?
                 let name = data["Name"] as? String
                 let description = data["Description"] as? String
                 let shortDescription = data["ShortDescription"] as? String
                 let messageLink = data["MessageLink"] as? String
-                let appleUUID = data["AppleUUID"] as? String
-                let ShortUUID = data["AppleUUID"] as? String
-                var arrayOfLanguages: [Languages]?
-                self.loadLanguages(doc: docc) { languages in
-                    arrayOfLanguages = languages
-                    print("hohohoh")
-                    
-                    
-                    var imageData: Data?
-                    self.loadImage(userID: appleUUID ?? "") {imgData in
-                        imageData = imgData
-                        //adding mentor if he is mentoring
-                        if isMentoring != false  {
-                            let newMentor = MentorCellModel(name: name, discription: description, shortDiscription: shortDescription, imageData: imageData, languages: arrayOfLanguages ?? [], messageLink: messageLink, ShortUUID: ShortUUID)
-                            arrayOfMentors.append(newMentor)
+                let shortUUID = data["AppleUUID"] as? String
+                let languages = data["Languages"] as? [String]
+                
+                let group = DispatchGroup()
+                
+                var imageData: Data?
+                
+                group.enter()
+                FirebaseImageService.loadImage(userID: shortUUID ?? "") {imgData in
+                    imageData = imgData
+                    group.leave()
+                }
+            
+                group.notify(queue: .main){
+                    if isMentoring != false  {
+                        let newMentor = MentorCellModel(name: name, discription: description, shortDiscription: shortDescription, imageData: imageData, languages: LanguageNameToEnumType.from(languages ?? []), messageLink: messageLink, ShortUUID: shortUUID)
 
-                        }
+                        print(LanguageNameToEnumType.from(languages ?? []))
+                        arrayOfMentors.append(newMentor)
+                        
 
-                        
-                        guard let indexWeNeedToDelete = arrayfOfDocsFromWhereWeNeedToGetMentorsInfo.firstIndex(of: docc) else {return}
-                        arrayfOfDocsFromWhereWeNeedToGetMentorsInfo.remove(at: indexWeNeedToDelete)
-                        
-                        if arrayfOfDocsFromWhereWeNeedToGetMentorsInfo.count == 0 {
+                        if int + 1 == numberOfMentors{
                             completionn(arrayOfMentors)
                         }
+
                     }
                 }
             }
-        }
-    }
-    
-    private func loadLanguages(doc: QueryDocumentSnapshot, completion: @escaping ([Languages]) -> ()){
-        var arrayOfLanguages: [Languages] = []
-        
-        let enumer = LanguageNameToEnumType()
-        doc.reference.collection("Languages").getDocuments { languages, errorr in
-            guard errorr == nil else {return}
-            guard let documentss = languages else {return}
+
             
-            for doc in documentss.documents{
-                let data = doc.data()
-                guard let languageName = data["LanguageName"] as? String else {return}
-                arrayOfLanguages.append(enumer.from(languageName))
-            }
-            completion(arrayOfLanguages)
         }
-        
-        
     }
 
-    private func loadImage(userID: String, completion: @escaping (Data?) -> ()){
-        let ref = Storage.storage().reference().child("avatars").child(userID)
-        var imageData = Data()
-        ref.getData(maxSize: 1024 * 1024 * 2) { data, error in
-            guard error == nil else {return}
-            guard let imageData = data else {return}
-            completion(data)
-        }
-        
-        
-    }
-    
 }
-

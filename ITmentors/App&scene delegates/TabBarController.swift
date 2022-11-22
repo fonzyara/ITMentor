@@ -41,11 +41,15 @@ class TabBarController: UITabBarController {
 
 extension TabBarController{
     private func setupTabBar() {
+//        let tabBarAppearance = UITabBarAppearance()
+//        tabBarAppearance.configureWithTransparentBackground()
+//        tabBarAppearance.backgroundColor = .AppPalette.elementsColor
+//        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().tintColor = .AppPalette.thirdElementColor
+        UITabBar.appearance().unselectedItemTintColor = .darkGray
+        UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().backgroundColor = .AppPalette.elementsColor
-        UITabBar.appearance().tintColor = .white
-        UITabBar.appearance().unselectedItemTintColor = .AppPalette.secondElementColor
-        //        UITabBar.appearance().layer.cornerRadius = 5
-        
+        UITabBar.appearance().barTintColor = .AppPalette.elementsColor
         
         let dataSource: [TabBarItem] = [.mentors, .profile]
         self.viewControllers = dataSource.map {
@@ -71,22 +75,14 @@ extension TabBarController{
         navController.view.backgroundColor = .AppPalette.elementsColor
         navController.navigationBar.topItem?.title = title as? String
         
-        
-        UITabBar.appearance().isTranslucent = false
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithTransparentBackground()
-        navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25) ]
+
+        navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.AppPalette.thirdElementColor, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25) ]
         UINavigationBar.appearance().standardAppearance = navigationBarAppearance
-        navController.navigationBar.topItem?.title = title as? String
         UINavigationBar.appearance().isTranslucent = false
         
     
-        
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithTransparentBackground()
-        tabBarAppearance.backgroundColor = .AppPalette.elementsColor
-        UITabBar.appearance().standardAppearance = tabBarAppearance
-        UITabBar.appearance().tintColor = .AppPalette.secondElementColor
         
         return navController
     }

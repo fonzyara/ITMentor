@@ -1,5 +1,5 @@
 //
-//  BecomeMentorViewController.swift
+//  FillDataViewController.swift
 //  ITmentors
 //
 //  Created by Vladimir Alecseev on 30.09.2022.
@@ -12,64 +12,71 @@
 
 import UIKit
 
-protocol BecomeMentorDisplayLogic: AnyObject {
-    func displayCompletion(viewModel: BecomeMentor.LoadDataOnServer.ViewModel)
-    func pasteDataFromProfile(viewMode: BecomeMentor.TransferDataFromProfileToEditScreen.ViewModel)
+protocol FillDataDisplayLogic: AnyObject {
+    func displayCompletion(viewModel: FillData.LoadDataOnServer.ViewModel)
+    func pasteDataFromProfile(viewMode: FillData.TransferDataFromProfileToEditScreen.ViewModel)
 }
 
-class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UINavigationControllerDelegate {
+class FillDataViewController: UIViewController, FillDataDisplayLogic, UINavigationControllerDelegate {
     var isBackButtonHidden = false
-    var imagePicker = UIImagePickerController()
-    var arrayOfLanguages: [Languages] = []
+    
     var isItDataEditingScreen = false{
         didSet{
             if isItDataEditingScreen == true{
                 interactor?.getYourInfo()
+                print(12)
             }
         }
     }
+    
+    private lazy var presentationView: FillDataView = {
+        let view = FillDataView()
+        view.delegate = self
+        return view
+    }()
 
-    var interactor: BecomeMentorBusinessLogic?
-    var router: (NSObjectProtocol & BecomeMentorRoutingLogic & BecomeMentorDataPassing)?
+    var interactor: FillDataBusinessLogic?
+    var router: (NSObjectProtocol & FillDataRoutingLogic & FillDataDataPassing)?
 
+    
+//    init(isBackButtonHidden: Bool, isItDataEditingScreen: Bool) {
+//        self.isBackButtonHidden = isBackButtonHidden
+//        self.isItDataEditingScreen = isItDataEditingScreen
+//        super.init(nibName: nil, bundle: nil)
+//    }
     // MARK: Object lifecycle
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        BecomeMentorConfigurator.shared.configure(with: self)
+        FillDataConfigurator.shared.configure(with: self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        FillDataConfigurator.shared.configure(with: self)
     }
 
     // MARK: View lifecycle
 
+    override func loadView() {
+        super.loadView()
+        view = presentationView
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.hidesBackButton = isBackButtonHidden
-//        setConstraints()
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-//        let selectLanguagesVC = SelectLanguagesViewController()
-//
-//        router?.navigateToSomewhere(source: self, destination: selectLanguagesVC)
-    }
-
-    override func viewDidLayoutSubviews(){
-        setConstraints()
-    }
-    // MARK: Do something
-
  
 
-    func displayCompletion(viewModel: BecomeMentor.LoadDataOnServer.ViewModel) {
+ 
+//MARK: - Presenter tasks
+    func displayCompletion(viewModel: FillData.LoadDataOnServer.ViewModel) {
         if viewModel.isSuccesed == true{
             navigationController?.popToRootViewController(animated: true)
-//            if let rootVC = navigationController?.viewControllers.first as? ProfileScreenViewController{
-//                rootVC.loadYourData()
-//            }
+            let rootVC = navigationController?.viewControllers.last as? ProfileScreenViewController
+            print(navigationController?.viewControllers)
+            print(rootVC)
+            rootVC?.updateScreenAfterDataFilling()
         }
         else {
             let dialogMessage = UIAlertController(title: "Ошибка", message: "Не удалось загрузить данные на сервер. Попробуйте проверить сетевое соединение", preferredStyle: .alert)
@@ -79,510 +86,47 @@ class BecomeMentorViewController: UIViewController, BecomeMentorDisplayLogic, UI
         }
     }
 
-    func pasteDataFromProfile(viewMode: BecomeMentor.TransferDataFromProfileToEditScreen.ViewModel){
-        messageLink.text = viewMode.messageLink
-        name.text = viewMode.name
-        shortDiscription.text = viewMode.shortDiscription
-        discription.text = viewMode.discription
-        arrayOfLanguages = viewMode.languages
-        selectedImageView.image = UIImage(data: viewMode.imageData ?? Data())
-        setConstraints()
-
-        getArray(array: arrayOfLanguages)
-
+    func pasteDataFromProfile(viewMode: FillData.TransferDataFromProfileToEditScreen.ViewModel){
+        presentationView.viewModel = viewMode
     }
+}
 
-
-    private let scrollView: UIScrollView = {
-        let sv = UIScrollView()
-        sv.backgroundColor = UIColor.AppPalette.backgroundColor
-        sv.isScrollEnabled = true
-
-
-        return sv
-    }()
-
-
-    private let selectedImageView: UIImageView = {
-      let iv = UIImageView()
-        iv.backgroundColor = .darkGray
-        iv.layer.borderColor = UIColor.AppPalette.secondElementColor.cgColor
-        iv.layer.borderWidth = 2
-        iv.isUserInteractionEnabled = true
-        iv.clipsToBounds = true
-        return iv
-    }()
-    private let imageViewHeader: UILabel = {
-        let l = UILabel()
-        l.textColor = .darkGray
-        l.text = "Выберите ваше фото"
-        l.textAlignment = .center
-
-        return l
-    }()
-    private let shortDiscription: UITextField = {
-        var textField = UITextField()
-        textField.text = "Например: Senior IOS dev"
-        textField.backgroundColor = UIColor.AppPalette.secondElementColor
-        textField.textColor = .lightGray
-        textField.font = UIFont.systemFont(ofSize: 15)
-        textField.borderStyle = UITextField.BorderStyle.roundedRect
-        textField.autocorrectionType = UITextAutocorrectionType.no
-        textField.returnKeyType = UIReturnKeyType.continue
-        textField.clearButtonMode = UITextField.ViewMode.whileEditing
-        textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-        textField.layer.borderColor = UIColor.AppPalette.secondElementColor.cgColor
-        textField.layer.borderWidth = 2
-        textField.layer.cornerRadius = 10
-        return textField
-
-    }()
-    private let shortDiscriptionLabel: UILabel = {
-        let l = UILabel()
-        l.textColor = .darkGray
-        l.text = "Введите краткое описание"
-        l.textAlignment = .center
-
-        return l
-    }()
-    private let messageLink: UITextField = {
-        var textField = UITextField()
-        textField.text = "Например: https://t.me/escaping_closure"
-        textField.backgroundColor = UIColor.AppPalette.secondElementColor
-        textField.textColor = .lightGray
-        textField.font = UIFont.systemFont(ofSize: 15)
-        textField.borderStyle = UITextField.BorderStyle.roundedRect
-        textField.autocorrectionType = UITextAutocorrectionType.no
-        textField.returnKeyType = UIReturnKeyType.continue
-        textField.clearButtonMode = UITextField.ViewMode.whileEditing
-        textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-        textField.layer.borderColor = UIColor.AppPalette.secondElementColor.cgColor
-        textField.layer.borderWidth = 2
-        textField.layer.cornerRadius = 10
-        return textField
-
-    }()
-    private let messageLinkLabel: UILabel = {
-        let l = UILabel()
-        l.textColor = .darkGray
-        l.text = "!Ссылка! для связи с вами"
-        l.textAlignment = .center
-
-        return l
-    }()
+extension FillDataViewController: FillDataViewDelegate{
+    func dismiss() {
+        dismiss(animated: true)
+    }
+    func presentAlert(_ alert: UIAlertController) {
+        present(alert, animated: true)
+    }
+    func presentImagePicker(_ picker: UIImagePickerController) {
+        present(picker, animated: true)
+    }
+    func alertOfInvalidRef() {
+        let alert = UIAlertController(title: "Недействительная ссылка", message: "Проверьте правильность введенной ссылки, она должна начинаться с https://", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Что ж :(", style: .cancel)
+        alert.addAction(ok)
+        present(alert, animated: true)
+    }
     
-    private let name: UITextField = {
-        var textField = UITextField()
-        textField.text = "Например: Владимир"
-        textField.backgroundColor = UIColor.AppPalette.secondElementColor
-        textField.textColor = .lightGray
-        textField.font = UIFont.systemFont(ofSize: 15)
-        textField.borderStyle = UITextField.BorderStyle.roundedRect
-        textField.autocorrectionType = UITextAutocorrectionType.no
-        textField.returnKeyType = UIReturnKeyType.continue
-        textField.clearButtonMode = UITextField.ViewMode.whileEditing
-        textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-        textField.layer.borderColor = UIColor.AppPalette.secondElementColor.cgColor
-        textField.layer.borderWidth = 2
-        textField.layer.cornerRadius = 10
-        return textField
-    }()
-    private let nameLabel: UILabel = {
-        let l = UILabel()
-        l.textColor = .darkGray
-        l.text = "Как вас зовут?"
-        l.textAlignment = .center
-
-        return l
-    }()
+    func confirmSuccess(with: FillData.LoadDataOnServer.Request) {
+        interactor?.loadInfoToFirebase(request: with)
+    }
     
-    private let discription: UITextView = {
-        var textView = UITextView()
-        textView.text = "Например: Помогаю новичкам со входом в IT. Подскажу на счет резюме и проведу мок собес."
-
-        textView.font = UIFont.systemFont(ofSize: 15)
-        textView.backgroundColor = UIColor.AppPalette.secondElementColor
-        textView.textColor = .lightGray
-        textView.isScrollEnabled = false
-        textView.layer.borderColor = UIColor.AppPalette.secondElementColor.cgColor
-        textView.layer.borderWidth = 2
-        textView.layer.cornerRadius = 10
-        return textView
-
-    }()
-    private let discriptionLabel: UILabel = {
-        let l = UILabel()
-        l.textColor = .darkGray
-        l.text = "Введите подробное описание"
-        l.textAlignment = .center
-        return l
-    }()
-
-    private let confirmButton: UIButton = {
-        let b = UIButton()
-        b.backgroundColor = .AppPalette.secondElementColor
-        b.setTitle("Подтвердить", for: .normal)
-        b.addTarget(self, action: #selector(confirm), for: .touchUpInside)
-       return b
-    }()
+    func confirmError() {
+        let alert = UIAlertController(title: "Не все поля запонены", message: "Необходимо, чтобы все поля были заполнены и языки программироавния были выбраны.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Что ж", style: .cancel))
+        present(alert, animated: true)
+    }
     
-    private let selectLanguagesButton: UIButton = {
-        let b = UIButton()
-        b.backgroundColor = .blue
-        b.setTitle("Выбрать языки программирования", for: .normal)
-        b.addTarget(self, action: #selector(selectLanguagelTransition), for: .touchUpInside)
-        b.layer.cornerRadius = 10
-      return b
-    }()
-    
-    private let collectionViewOfLanguages: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 6
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-       return collectionView
-    }()
-
-    @objc private func selectLanguagelTransition(){
+    func selectLanguageTransition(){
         let selectLanguagesVC = SelectLanguagesViewController()
         selectLanguagesVC.returnArrayOfLanguagesToPreviousScreenDelegate = self
         router?.navigateToSomewhere(source: self, destination: selectLanguagesVC)
     }
-    @objc private func confirm(){
-        guard let photoData = selectedImageView.image?.pngData(), let shortDiscriptionn = shortDiscription.text, shortDiscriptionn != "", shortDiscriptionn != "Например: Senior IOS dev", let discriptionn = discription.text, discriptionn != "", discriptionn != "Например: Помогаю новичкам со входом в IT. Подскажу на счет резюме и проведу мок собес.", let name = name.text, name != "", name != "Например: Владимир", arrayOfLanguages.count > 0, let link = messageLink.text, link != "", link != "Например: https://t.me/escaping_closure" else {
-            // if not okey
-            let alert = UIAlertController(title: "Не все поля запонены", message: "Необходимо, чтобы все поля были заполнены и языки программироавния были выбраны.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Что ж", style: .cancel))
-            present(alert, animated: true)
-            return}
-        
-        //if okey
-        let request = BecomeMentor.LoadDataOnServer.Request(name: name, discription: discriptionn, imageData: photoData, languages: arrayOfLanguages, messageLink: link, shortDiscription: shortDiscriptionn)
-        interactor?.loadInfoToFirebase(request: request)
-    }
-
 }
-
-//MARK: - subviews & constraints
-extension BecomeMentorViewController{
-    private func setConstraints() {
-        hideKeyboardWhenTappedAround()
-        
-        if isBackButtonHidden == true {navigationItem.hidesBackButton = true}
-//        scrollView.delegate = self
-//        scrollView.contentSize = CGSize(width:self.view.frame.size.width, height: 1000)
-
-        discription.delegate = self
-        shortDiscription.delegate = self
-        name.delegate = self
-        messageLink.delegate = self
-        let screensize: CGRect = UIScreen.main.bounds
-        let imageViewWidth = screensize.width * 0.6
-        let itemsWidth = screensize.width * 0.85
-
-        scrollView.contentSize = CGSize(width: screensize.width, height: 900)
-
-        imagePicker.delegate = self
-        imagePicker.allowsEditing = true
-
-
-
-        view.addSubview(scrollView)
-
-        scrollView.addSubview(selectedImageView)
-        scrollView.addSubview(imageViewHeader)
-        scrollView.addSubview(name)
-        scrollView.addSubview(nameLabel)
-        scrollView.addSubview(shortDiscription)
-        scrollView.addSubview(shortDiscriptionLabel)
-        scrollView.addSubview(discription)
-        scrollView.addSubview(discriptionLabel)
-        scrollView.addSubview(messageLink)
-        scrollView.addSubview(messageLinkLabel)
-        scrollView.addSubview(selectLanguagesButton)
-
-        scrollView.snp.makeConstraints { make in
-            make.top.right.left.bottom.equalToSuperview()
-
-        }
-
-        selectedImageView.snp.makeConstraints { make in
-            make.top.equalTo(imageViewHeader.snp.bottom).offset(15)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(imageViewWidth)
-            make.height.equalTo(selectedImageView.snp.width)
-        }
-        selectedImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapAddPhoto)))
-        selectedImageView.layer.cornerRadius = imageViewWidth / 2
-
-        imageViewHeader.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(scrollView.snp.top).offset(20)
-            
-        }
-
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(selectedImageView.snp.bottom).offset(15)
-            make.centerX.equalToSuperview()
-        }
-
-        name.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.width.equalTo(itemsWidth)
-            make.height.equalTo(40)
-            make.top.equalTo(nameLabel.snp.bottom).offset(7)
-        }
-        shortDiscriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(name.snp.bottom).offset(15)
-            make.centerX.equalToSuperview()
-        }
-
-        shortDiscription.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.width.equalTo(itemsWidth)
-            make.height.equalTo(40)
-            make.top.equalTo(shortDiscriptionLabel.snp.bottom).offset(7)
-        }
-
-        discriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(shortDiscription.snp.bottom).offset(15)
-            make.centerX.equalToSuperview()
-        }
-        discription.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.width.equalTo(itemsWidth)
-            make.top.equalTo(discriptionLabel.snp.bottom).offset(7)
-        }
-        messageLinkLabel.snp.makeConstraints { make in
-            make.top.equalTo(discription.snp.bottom).offset(15)
-            make.centerX.equalToSuperview()
-        }
-
-        messageLink.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.width.equalTo(itemsWidth)
-            make.height.equalTo(40)
-            make.top.equalTo(messageLinkLabel.snp.bottom).offset(7)
-        }
-        
-        selectLanguagesButton.snp.makeConstraints { make in
-            make.top.equalTo(messageLink.snp.bottom).offset(30)
-            make.width.equalTo(itemsWidth)
-            make.centerX.equalToSuperview()
-            make.height.equalTo(40)
-        }
-    }
-    
-    func layoutCollectionView(){
-        let screensize: CGRect = UIScreen.main.bounds
-        let itemsWidth = screensize.width * 0.9
-        var heigth = 0
-        //calculate collectionViewHeight
-        for i in 1...arrayOfLanguages.count + 1 {if i % 3 == 0{heigth += 35}}
-        if heigth == 0 {heigth = 30}
-        
-
-        if scrollView.contains(collectionViewOfLanguages){
-            collectionViewOfLanguages.reloadData()
-            collectionViewOfLanguages.snp.remakeConstraints { make in
-                make.top.equalTo(selectLanguagesButton.snp.bottom).offset(15)
-                make.width.equalTo(itemsWidth)
-                make.centerX.equalToSuperview()
-                make.height.equalTo(heigth)
-            }
-        } else {
-            scrollView.addSubview(collectionViewOfLanguages)
-            collectionViewOfLanguages.delegate = self
-            collectionViewOfLanguages.dataSource = self
-            collectionViewOfLanguages.register(LanguageCollectionViewCell.self, forCellWithReuseIdentifier: "LanguageCell")
-            
-            collectionViewOfLanguages.snp.makeConstraints { make in
-                make.top.equalTo(selectLanguagesButton.snp.bottom).offset(15)
-                make.width.equalTo(itemsWidth)
-                make.centerX.equalToSuperview()
-                make.height.equalTo(heigth)
-            }
-        }
-        
-        
-        
-        guard arrayOfLanguages.count >= 1 else {confirmButton.removeFromSuperview(); return}
-        
-        scrollView.addSubview(confirmButton)
-        
-        confirmButton.snp.makeConstraints { make in
-            make.top.equalTo(collectionViewOfLanguages.snp.bottom).offset(30)
-            make.width.equalTo(itemsWidth)
-            make.centerX.equalToSuperview()
-            make.height.equalTo(50)
-        }
+extension FillDataViewController: ReturnArrayOfLanguagesToPreviousScreenProtocol{
+    func getArray(array: [Language]) {
+        presentationView.arrayOfLanguages = array
+        presentationView.layoutCollectionView()
     }
 }
-//MARK: - ImagePickerdelegate
-extension BecomeMentorViewController: UIImagePickerControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        print("Photo has picked1")
-
-        guard let pickedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
-
-        print("Photo has picked")
-        selectedImageView.image = pickedImage
-
-
-        dismiss(animated: true, completion: nil)
-    }
-
-
-    @objc func didTapAddPhoto(_ sender: Any) {
-        print(123)
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Photo Gallery", style: .default, handler: { (button) in
-            self.imagePicker.sourceType = .photoLibrary
-
-            self.present(self.imagePicker, animated: true, completion: nil)
-        }))
-
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
-    }
-}
-
-//MARK: - ScrollViewDelegate
-extension BecomeMentorViewController: UIScrollViewDelegate{
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate {
-            stoppedScrolling()
-        }
-    }
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        stoppedScrolling()
-    }
-
-    func stoppedScrolling() {
-        // done, do whatever
-    }
-
-}
-
-//MARK: - TextViewDelegate
-extension BecomeMentorViewController: UITextViewDelegate{
-    func textViewDidBeginEditing (_ textView: UITextView) {
-        if discription.text == "Например: Помогаю новичкам со входом в IT. Подскажу на счет резюме и проведу мок собес."{
-            discription.text = ""
-            discription.textColor = .white
-        }
-    }
-    func textViewDidEndEditing(_ textView: UITextView) {
-//        textView.textColor = .darkGray
-    }
-}
-//MARK: - TextFieldDelegate
-extension BecomeMentorViewController: UITextFieldDelegate{
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-
-        textField.endEditing(false)
-        return true
-    }
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == messageLink{
-            let linkChecker = CheckerIfStringIsLink()
-            guard let text = textField.text else {return}
-            let isLink = linkChecker.check(text)
-            if isLink == false{
-                textField.text = ""
-                let alert = UIAlertController(title: "Недействительная ссылка", message: "Проверьте правильность введенной ссылки, она должна начинаться с https://", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "Что ж :(", style: .cancel)
-                alert.addAction(ok)
-                present(alert, animated: true)
-            }
-        }
-    }
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        switch textField{
-        case shortDiscription:
-            if textField.text == "Например: Senior IOS dev"{
-                textField.text = ""
-            }
-        case messageLink:
-            if textField.text == "Например: https://t.me/escaping_closure"{
-                textField.text = ""
-            }
-        case name:
-            if textField.text == "Например: Владимир"{
-                textField.text = ""
-            }
-        default:
-            print("nothing to do")
-        }
-    }
-}
-
-extension BecomeMentorViewController: ReturnArrayOfLanguagesToPreviousScreenProtocol{
-    func getArray(array: [Languages]) {
-        arrayOfLanguages = array
-//        guard arrayOfLanguages.count > 0 else {return}
-        layoutCollectionView()
-    }
-}
-
-//MARK: UICollectionViewDataSource
-extension BecomeMentorViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
-    }
-
-}
-//MARK: UICollectionViewDataSource
-
-extension BecomeMentorViewController: UICollectionViewDataSource {
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return arrayOfLanguages.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LanguageCell", for: indexPath) as! LanguageCollectionViewCell
-        cell.update(language: arrayOfLanguages[indexPath.row])
-
-        return cell
-    }
-}
-
-
-//MARK: UICollectionViewDelegateFlowLayout
-extension BecomeMentorViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return CGSize(width: view.bounds.width * 0.3, height: 30)
-    }
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
-        let numberOfItems = CGFloat(collectionView.numberOfItems(inSection: section))
-        let combinedItemWidth = (numberOfItems * flowLayout.itemSize.width) + ((numberOfItems - 1)  * flowLayout.minimumInteritemSpacing)
-        let padding = ((collectionView.frame.width - combinedItemWidth) / 2) - (combinedItemWidth / CGFloat(numberOfItems)) + CGFloat(numberOfItems) + 18
-        return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
-    }
-}
-

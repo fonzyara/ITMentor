@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ReturnArrayOfLanguagesToPreviousScreenProtocol{
-    func getArray(array: [Languages])
+    func getArray(array: [Language])
     
 }
 
@@ -49,7 +49,7 @@ class SelectLanguagesViewController: UIViewController {
     }()
     private let confirmButton: UIButton = {
         let b = UIButton()
-        b.backgroundColor = .blue
+        b.backgroundColor = .AppPalette.thirdElementColor
         b.addTarget(self, action: #selector(returnArrayOfLanguagesToPreviousScreen), for: .touchUpInside)
         b.setTitle("Подтвердить", for: .normal)
         b.layer.cornerRadius = 10
@@ -116,7 +116,7 @@ extension SelectLanguagesViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LanguageTableViewCell", for: indexPath) as! LanguageTableViewCell
-        cell.label.text = viewModel?.arrayOfAllLanguages[indexPath.row].languageName
+        cell.label.text = viewModel?.arrayOfAllLanguages[indexPath.row].rawValue
         cell.icon.image = UIImage(named: viewModel?.arrayOfAllLanguages[indexPath.row].iconName ?? "")
         
         let bgColorView = UIView()

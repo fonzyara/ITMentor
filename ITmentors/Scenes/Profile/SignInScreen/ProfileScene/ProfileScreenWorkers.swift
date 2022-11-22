@@ -26,58 +26,35 @@ class ProfileScreenWorker {
             guard let document = doc else {error(); return}
             
             guard let data = document.data() else {error(); return}
-
+            
             let name = data["Name"] as? String
             let description = data["Description"] as? String
-            let shortDescription = data["ShortDescription"] as? String
+            let shortDescription = document["ShortDescription"] as? String
             let messageLink = data["MessageLink"] as? String
             let appleUUID = data["AppleUUID"] as? String
             let isMentoring = data["IsMentoring"] as? Bool
+            let languages = data["Languages"] as? [String]
             
-            var arrayOfLanguages: [Languages] = []
+            let languagesAsEnum = LanguageNameToEnumType.from(languages ?? [])
             
-            self.loadLanguages(docRef: ref) { languages in
-                arrayOfLanguages = languages
-            }
-            
-            var imageData: Data?
-            self.loadImage(userID: appleUUID ?? "") { imgData in
-                imageData = imgData
-                let response: ProfileScreen.loadYourDataa.Response =  ProfileScreen.loadYourDataa.Response(name: name, discription: description, imageData: imageData, languages: arrayOfLanguages, messageLink: messageLink, shortDiscription: shortDescription, isMentoring: isMentoring)
-                
+
+            FirebaseImageService.loadImage(userID: appleUUID ?? "") { imgData in
+                let response: ProfileScreen.loadYourDataa.Response =  ProfileScreen.loadYourDataa.Response(name: name, discription: description, imageData: imgData, languages: languagesAsEnum, messageLink: messageLink, shortDiscription: shortDescription, isMentoring: isMentoring)
                 completion(response)
             }
-        }
-    }
-    
-    private func loadLanguages(docRef: DocumentReference, completion: @escaping ([Languages]) -> ()){
-        var arrayOfLanguages: [Languages] = []
-        
-        let enumer = LanguageNameToEnumType()
-        docRef.collection("Languages").getDocuments { languages, errorr in
-            guard errorr == nil else {return}
-            guard let documentss = languages else {return}
             
-            for doc in documentss.documents{
-                let data = doc.data()
-                guard let languageName = data["LanguageName"] as? String else {return}
-                
-                arrayOfLanguages.append(enumer.from(languageName))
-            }
-            completion(arrayOfLanguages)
         }
-        
-        
     }
     
-    private func loadImage(userID: String, completion: @escaping (Data?) -> ()){
-        let ref = Storage.storage().reference().child("avatars").child(userID)
-        ref.getData(maxSize: 1024 * 1024 * 2) { data, error in
-            guard error == nil else {return}
-            guard let imageData = data else {return}
-            completion(imageData)
-        }
-    }
+    
+//    private func loadImage(userID: String, completion: @escaping (Data?) -> ()){
+//        let ref = Storage.storage().reference().child("avatars").child(userID)
+//        ref.getData(maxSize: 1024 * 1024 * 2) { data, error in
+//            guard error == nil else {return}
+//            guard let imageData = data else {return}
+//            completion(imageData)
+//        }
+//    }
 }
 
 class ChangeMentoringStatusWorker{
@@ -89,7 +66,7 @@ class ChangeMentoringStatusWorker{
             guard err == nil else {return}
             
             let isMentoring = document?.get("IsMentoring") as? Bool?
-            print(isMentoring)
+            
             if isMentoring == true || isMentoring == nil {
                 ref.setData(["IsMentoring": false], merge: true)
             } else{

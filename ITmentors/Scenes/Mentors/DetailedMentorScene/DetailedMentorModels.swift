@@ -15,7 +15,7 @@ struct DetailedMentorCellModel{
     let name: String?
     let discription: String?
     let imageData: Data?
-    let languages: [Languages]
+    let languages: [Language]
 }
 enum DetailedMentor {
     // MARK: Use cases
@@ -28,7 +28,7 @@ enum DetailedMentor {
             var name: String?
             var discription: String?
             var imageData: Data?
-            var languages: [Languages] = []
+            var languages: [Language] = []
             var messageLink: String?
             var shortDiscription: String?
             var ShortUUID: String?
@@ -38,7 +38,7 @@ enum DetailedMentor {
             var name: String?
             var discription: String?
             var imageData: Data?
-            var languages: [Languages] = []
+            var languages: [Language] = []
             var messageLink: String?
             var shortDiscription: String?
             var ShortUUID: String?

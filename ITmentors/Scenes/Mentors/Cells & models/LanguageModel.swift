@@ -6,32 +6,15 @@
 //
 
 import UIKit
-enum Languages: CaseIterable{
+enum Language: String, CaseIterable{
     
-    case python
-    case swift
-    case js
-    case cPlusPlus
-    case php
-    case ruby
+    case python = "Python"
+    case swift = "Swift"
+    case js = "JS"
+    case cPlusPlus = "C++"
+    case php = "PHP"
+    case ruby = "Ruby"
     
-    var languageName: String {
-        switch self {
-        case .python:
-            return "Python"
-        case .swift:
-            return "Swift"
-        case .js:
-            return "JS"
-        case .cPlusPlus:
-            return "C++"
-        case .php:
-            return "PHP"
-        case .ruby:
-            return "Ruby"
-            
-        }
-    }
     var color: UIColor {
         switch self {
         case .python:

@@ -17,15 +17,20 @@ protocol ProfileScreenDisplayLogic: AnyObject {
     func loadYourInfo(viewModel: ProfileScreen.loadYourDataa.ViewModel)
     func accountMentoringStatusChanges(viewModel: ProfileScreen.ChangeMentoringStatus.ViewModel)
     func accountDeleted()
-    
 }
 
 class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
     
-    var data: ProfileScreen.loadYourDataa.ViewModel?
-    
     var interactor: ProfileScreenBusinessLogic?
     var router: (NSObjectProtocol & ProfileScreenRoutingLogic & ProfileScreenDataPassing)?
+    
+    var data: ProfileScreen.loadYourDataa.ViewModel?
+    
+    private lazy var presentationView: ProfileScreenView = {
+        let view = ProfileScreenView()
+        view.delegate = self
+        return view
+    }()
     
     // MARK: Object lifecycle
     
@@ -39,30 +44,24 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
         ProfileMentorConfigurator.shared.configure(with: self)
     }
     
-    // MARK: View lifecycle
     
+    // MARK: View lifecycle
     override func loadView() {
         super.loadView()
-        view.backgroundColor = .AppPalette.backgroundColor
+        view = presentationView
+        
         loadYourData()
         showRegistationScreenIfNeeded()
-        
     }
-    override func viewDidAppear(_ animated: Bool) {
-        let menuButtonImage = UIImage(systemName: "gear")
+    override func viewWillAppear(_ animated: Bool) {
+        let menuButtonImage = UIImage(systemName: "gear")?.withTintColor(.AppPalette.thirdElementColor, renderingMode: .alwaysOriginal)
         let menuButton = UIBarButtonItem(image: menuButtonImage, style: .plain, target: self, action: #selector(showActionsSheet))
         navigationItem.rightBarButtonItem = menuButton
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        yourImageView.layer.cornerRadius = yourImageView.bounds.width / 2
     }
     
     
     // MARK: To interactor
     private func loadYourData(){
-        addSpinner()
         interactor?.getYourData()
     }
     
@@ -82,22 +81,15 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
         if vcWeNeedToShow is SignInWithAppleViewController {
             router?.navigateToSingInViewController(source: self, destination: vcWeNeedToShow as! SignInWithAppleViewController)
         }
-        else if vcWeNeedToShow is BecomeMentorViewController {
-            router?.navigateToFillDataViewController(source: self, destination: vcWeNeedToShow as! BecomeMentorViewController)
+        else if vcWeNeedToShow is FillDataViewController {
+            router?.navigateToFillDataViewController(source: self, destination: vcWeNeedToShow as! FillDataViewController)
         }
     }
     
     func loadYourInfo(viewModel: ProfileScreen.loadYourDataa.ViewModel) {
+//        prese data = viewModel
+        presentationView.viewModel = viewModel
         data = viewModel
-        yourImageView.image = UIImage(data: data?.imageData ?? Data())
-        nameLabel.text = data?.name
-        shortDescriptionLabel.text = data?.shortDiscription
-        descriptionLabel.text = "О себе: \(data?.discription ?? "")"
-        messageLinkLabel.text = data?.messageLink
-        
-        addSubviewss()
-        setConstraints()
-        spinner.removeFromSuperview()
     }
     func accountMentoringStatusChanges(viewModel: ProfileScreen.ChangeMentoringStatus.ViewModel) {
         data?.isMentoring = viewModel.changedTo
@@ -107,82 +99,13 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
         showRegistationScreenIfNeeded()
     }
     
-    private let yourImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.layer.masksToBounds = true
-        iv.image = UIImage()
-        iv.clipsToBounds = true
-        iv.backgroundColor = .gray
-        iv.layer.borderColor = UIColor.AppPalette.secondElementColor.cgColor
-        iv.layer.borderWidth = 2
-        
-        return iv
-    }()
-    private let shortDescriptionLabel: UILabel = {
-        let l = UILabel()
-        l.textColor = .gray
-        l.textAlignment = .center
-        l.numberOfLines = 1
-        l.lineBreakMode = .byWordWrapping
-        l.adjustsFontSizeToFitWidth = true
-        l.minimumScaleFactor = 0.5
-        return l
-    }()
-    private let nameLabel: UILabel = {
-        let l = UILabel()
-        l.textColor = .white
-        l.textAlignment = .center
-        l.numberOfLines = 1
-        l.lineBreakMode = .byWordWrapping
-        l.adjustsFontSizeToFitWidth = true
-        l.minimumScaleFactor = 0.5
-        l.font = UIFont.boldSystemFont(ofSize: 50)
-        return l
-    }()
-    private let descriptionLabel: UILabel = {
-        let l = UILabel()
-        l.textColor = .white
-        l.textAlignment = .center
-        l.numberOfLines = 1
-        l.lineBreakMode = .byWordWrapping
-        l.adjustsFontSizeToFitWidth = true
-        l.minimumScaleFactor = 0.5
-        return l
-    }()
-    private let messageLinkLabel: UILabel = {
-        let l = UILabel()
-        l.textColor = .gray
-        l.textAlignment = .center
-        l.numberOfLines = 1
-        l.lineBreakMode = .byWordWrapping
-        l.adjustsFontSizeToFitWidth = true
-        l.minimumScaleFactor = 0.5
-        return l
-    }()
-    
-    lazy private var collectionViewOfLanguages: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 6
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        return collectionView
-    }()
     
     private let editProfileButton: UIBarButtonItem = {
         let b = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(showActionsSheet))
-        b.tintColor = .AppPalette.secondElementColor
-        
+        b.tintColor = .AppPalette.thirdElementColor
         return b
     }()
-    private let spinner: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(style: .large)
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.startAnimating()
-        spinner.color = .white
-        return spinner
-    }()
+    
     @objc private func showActionsSheet(){
         var currectMentoringStatusText: String {
             if data?.isMentoring == true || data?.isMentoring == nil{
@@ -198,12 +121,11 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
                 return .default
             }
         }
-    
-        
+
         let alert = UIAlertController(title: "Настройки", message: "", preferredStyle: .actionSheet)
         
         alert.addAction(UIAlertAction(title: "Изменить информацию", style: .default , handler:{ [unowned self] actionn in
-            let editVC = BecomeMentorViewController()
+            let editVC = FillDataViewController()
             guard let data = data else {return}
             router?.navigateToEditDataViewController(source: self, destination: editVC, withData: data)
         }))
@@ -222,127 +144,13 @@ class ProfileScreenViewController: UIViewController, ProfileScreenDisplayLogic {
     
 }
 
+
 extension ProfileScreenViewController{
-    func addSubviewss(){
-        view.addSubview(nameLabel)
-        view.addSubview(shortDescriptionLabel)
-        view.addSubview(yourImageView)
-        view.addSubview(collectionViewOfLanguages)
-        view.addSubview(descriptionLabel)
-        view.addSubview(messageLinkLabel)
-        
-        collectionViewOfLanguages.register(LanguageCollectionViewCell.self, forCellWithReuseIdentifier: "LanguageCell")
-        collectionViewOfLanguages.delegate = self
-        collectionViewOfLanguages.dataSource = self
-    }
-    func setConstraints(){
-        
-        let width = UIScreen.main.bounds.width * 0.8
-        yourImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(15)
-            make.width.height.equalTo(width * 0.7)
-            make.centerX.equalToSuperview()
-        }
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(yourImageView.snp.bottom).offset(10)
-            make.width.equalTo(width)
-            make.height.equalTo(30)
-            make.centerX.equalToSuperview()
-        }
-        shortDescriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(5)
-            make.width.equalTo(width)
-            make.height.equalTo(30)
-            make.centerX.equalToSuperview()
-        }
-//        let screensize: CGRect = UIScreen.main.bounds
-//        let itemsWidth = screensize.width * 0.9
-//        var heigth = 0
-//        //calculate collectionViewHeight
-//        for i in 1...(data?.languages.count ?? 0) + 1 {if i % 3 == 0{heigth += 35}}
-//        if heigth == 0 {heigth = 30}
-        collectionViewOfLanguages.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(40)
-            make.right.equalToSuperview().offset(-40)
-            make.height.equalTo(30)
-            make.top.equalTo(shortDescriptionLabel.snp.bottom).offset(10)
-        }
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(collectionViewOfLanguages.snp.bottom).offset(10)
-            make.width.equalTo(width)
-            make.height.equalTo(30)
-            make.centerX.equalToSuperview()
-        }
-        messageLinkLabel.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-10)
-            make.centerX.equalToSuperview()
-        }
-    }
-    func addSpinner(){
-        view.addSubview(spinner)
-        spinner.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-        }
+    func updateScreenAfterDataFilling(){
+        loadYourData()
     }
 }
 
-//MARK: UICollectionViewDataSource
-
-extension ProfileScreenViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data?.languages.count ?? 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LanguageCell", for: indexPath) as! LanguageCollectionViewCell
-        guard let data = data else {return cell}
-        cell.update(language: data.languages[indexPath.row])
-
-        return cell
-    }
+extension ProfileScreenViewController: ProfileScreenViewDelegate{
+    
 }
-
-
-//MARK: UICollectionViewDataSource
-extension ProfileScreenViewController: UICollectionViewDelegate {
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
-    }
-
-}
-
-
-//MARK: UICollectionViewDelegateFlowLayout
-extension ProfileScreenViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        return CGSize(width: 90, height: 30)
-    }
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
-        let numberOfItems = CGFloat(collectionView.numberOfItems(inSection: section))
-        let combinedItemWidth = (numberOfItems * flowLayout.itemSize.width) + ((numberOfItems - 1)  * flowLayout.minimumInteritemSpacing)
-        let padding = ((collectionView.frame.width - combinedItemWidth) / 2) - (combinedItemWidth / CGFloat(numberOfItems)) + CGFloat(numberOfItems) + 18
-        return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: -padding)
-    }
-}
-

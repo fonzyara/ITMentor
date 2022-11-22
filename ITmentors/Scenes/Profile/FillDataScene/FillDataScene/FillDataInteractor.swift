@@ -1,5 +1,5 @@
 //
-//  BecomeMentorInteractor.swift
+//  FillDataInteractor.swift
 //  ITmentors
 //
 //  Created by Vladimir Alecseev on 30.09.2022.
@@ -12,36 +12,36 @@
 
 import UIKit
 
-protocol BecomeMentorBusinessLogic {
-    func loadInfoToFirebase(request: BecomeMentor.LoadDataOnServer.Request)
+protocol FillDataBusinessLogic {
+    func loadInfoToFirebase(request: FillData.LoadDataOnServer.Request)
     func getYourInfo()
 }
 
-protocol BecomeMentorDataStore {
+protocol FillDataDataStore {
     var name: String? {get set}
     var discription: String? {get set}
     var imageData: Data? {get set}
-    var languages: [Languages] {get set}
+    var languages: [Language] {get set}
     var messageLink: String? {get set}
     var shortDiscription: String? {get set}
 }
 
-class BecomeMentorInteractor: BecomeMentorBusinessLogic, BecomeMentorDataStore {
+class FillDataInteractor: FillDataBusinessLogic, FillDataDataStore {
     var name: String?
     var discription: String?
     var imageData: Data?
-    var languages: [Languages] = []
+    var languages: [Language] = []
     var messageLink: String?
     var shortDiscription: String?
     
     
-    var presenter: BecomeMentorPresentationLogic?
-    var worker: BecomeMentorWorker?
+    var presenter: FillDataPresentationLogic?
+    var worker: FillDataWorker?
     //var name: String = ""
     
     // MARK: Do something
     
-    func loadInfoToFirebase(request: BecomeMentor.LoadDataOnServer.Request) {
+    func loadInfoToFirebase(request: FillData.LoadDataOnServer.Request) {
         let name = request.name
         let discription = request.discription
         let shortDescription = request.shortDiscription
@@ -49,20 +49,20 @@ class BecomeMentorInteractor: BecomeMentorBusinessLogic, BecomeMentorDataStore {
         let languages = request.languages
         let messageLink = request.messageLink
         
-        worker = BecomeMentorWorker()
+        worker = FillDataWorker()
         worker?.loadToFirebase(name: name, description: discription, imageData: imageData, languages: languages, messageLink: messageLink, shortDescription: shortDescription, completion: {
-            let response = BecomeMentor.LoadDataOnServer.Response(isSuccesed: true)
+            let response = FillData.LoadDataOnServer.Response(isSuccesed: true)
             self.presenter?.presentIsSuccessed(response: response)
             UserDefaults.standard.set(true, forKey: "isInfoFilled")
 
         }, error: {
-            let response = BecomeMentor.LoadDataOnServer.Response(isSuccesed: false)
+            let response = FillData.LoadDataOnServer.Response(isSuccesed: false)
             self.presenter?.presentIsSuccessed(response: response)
         })
 
     }
     func getYourInfo(){
-        let response = BecomeMentor.TransferDataFromProfileToEditScreen.Response(name: name, discription: discription, imageData: imageData, languages: languages, messageLink: messageLink, shortDiscription: shortDiscription)
+        let response = FillData.TransferDataFromProfileToEditScreen.Response(name: name, discription: discription, imageData: imageData, languages: languages, messageLink: messageLink, shortDiscription: shortDiscription)
 
         self.presenter?.presentYourData(response: response)
         print(response)

@@ -8,16 +8,16 @@
 import UIKit
 
 protocol SelectLanguagesViewModelProtocol: AnyObject {
-    var arrayOfSelectedLanguages: [Languages] { get set }
-    var arrayOfAllLanguages: [Languages] { get set }
+    var arrayOfSelectedLanguages: [Language] { get set }
+    var arrayOfAllLanguages: [Language] { get set }
     func appendToArray(cellIndexPathRow: Int)
     func removeFromArray(cellIndexPathRow: Int)
 
 }
 
 class  SelectLanguagesViewModel: SelectLanguagesViewModelProtocol {
-    var arrayOfSelectedLanguages: [Languages] = []
-    var arrayOfAllLanguages: [Languages] = Languages.allCases
+    var arrayOfSelectedLanguages: [Language] = []
+    var arrayOfAllLanguages: [Language] = Language.allCases
 
     func appendToArray(cellIndexPathRow: Int){
         arrayOfSelectedLanguages.append(arrayOfAllLanguages[cellIndexPathRow])

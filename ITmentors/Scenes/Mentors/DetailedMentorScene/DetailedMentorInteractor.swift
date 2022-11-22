@@ -21,7 +21,7 @@ protocol DetailedMentorDataStore {
     var name: String? { get set}
     var discription: String? { get set}
     var imageData: Data? { get set}
-    var languages: [Languages] { get set}
+    var languages: [Language] { get set}
     var messageLink: String? { get set}
     var shortDiscription: String? { get set}
     var ShortUUID: String? {get set}
@@ -33,7 +33,7 @@ class DetailedMentorInteractor: DetailedMentorBusinessLogic, DetailedMentorDataS
     var name: String?
     var discription: String?
     var imageData: Data?
-    var languages: [Languages] = []
+    var languages: [Language] = []
     var messageLink: String?
     var shortDiscription: String?
     var ShortUUID: String?

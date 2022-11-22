@@ -1,4 +1,4 @@
-import Foundation
+
 import UIKit
 
 
@@ -13,5 +13,9 @@ extension UIColor{
         static var secondElementColor: UIColor{
             return UIColor(hex: 0x525CBE)
         }
+        static var thirdElementColor: UIColor{
+            return UIColor(hex: 0xCF8BF3)
+        }
+        
     }
 }

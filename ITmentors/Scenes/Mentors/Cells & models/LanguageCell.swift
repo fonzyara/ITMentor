@@ -5,11 +5,12 @@
 //  Created by Vladimir Alecseev on 28.09.2022.
 //
 
-import Foundation
 import UIKit
 
 
 class LanguageCollectionViewCell: UICollectionViewCell {
+    
+    
     var languageName: String?
     var languageBackgroundColor: UIColor?{
         didSet{
@@ -38,20 +39,15 @@ class LanguageCollectionViewCell: UICollectionViewCell {
         setUpGradiend?.frame = self.bounds
 
     }
-    func update(language: Languages){
-        self.languageName = language.languageName
-        self.languageIconName = language.iconName
-        self.languageBackgroundColor = language.color
+    func setup(language: Language){
+        languageName = language.rawValue
+        languageIconName = language.iconName
+        languageBackgroundColor = language.color
     }
     
     let languageImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
-//        iv.layer.cornerRadius = mentorImageView.frame.size.width / 2
-//        iv.layer.masksToBounds = true
-//        iv.backgroundColor = .clear
-//        iv.layer.borderColor = UIColor.AppPalette.secondElementColor.cgColor
-//        iv.layer.borderWidth = 2
         return iv
     }()
     let languageNameLabel: UILabel = {
@@ -68,16 +64,10 @@ extension LanguageCollectionViewCell{
     func createViews(){
         backgroundColor = self.languageBackgroundColor
         layer.cornerRadius = 15
-        
-        
         languageNameLabel.text = languageName
-      
-        
         addSubview(languageImageView)
         addSubview(languageNameLabel)
-        
         setConstraints()
-        
     }
     
     func setConstraints() {
@@ -90,18 +80,10 @@ extension LanguageCollectionViewCell{
         languageNameLabel.snp.makeConstraints { make in
             make.top.left.equalToSuperview().offset(5)
             make.bottom.equalToSuperview().offset(-5)
-//            make.width.equalToSuperview().multipliedBy(0.7)
             make.right.equalTo(languageImageView.snp.left).offset(-5)
 
         }
         
     }
 }
-extension UIView {
-    func applyShadowOnView() {
-        layer.shadowColor = UIColor.orange.cgColor
-        layer.shadowOpacity = 1
-        layer.shadowOffset = .zero
-        layer.shadowRadius = 5
-    }
-}
+

@@ -14,8 +14,9 @@ import UIKit
 
 protocol ProfileScreenRoutingLogic {
     func navigateToSingInViewController(source: ProfileScreenViewController, destination: SignInWithAppleViewController)
-    func navigateToFillDataViewController(source: ProfileScreenViewController, destination: BecomeMentorViewController)
-    func navigateToEditDataViewController(source: ProfileScreenViewController, destination: BecomeMentorViewController, withData: ProfileScreen.loadYourDataa.ViewModel)
+    func navigateToFillDataViewController(source: ProfileScreenViewController, destination: FillDataViewController)
+    func navigateToEditDataViewController(source: ProfileScreenViewController, destination: FillDataViewController, withData: ProfileScreen.loadYourDataa.ViewModel)
+    func navigateToStatisticsScreen(source: ProfileScreenViewController, destination: StatisticsViewController)
 
 }
 
@@ -28,42 +29,27 @@ class ProfileScreenRouter: NSObject, ProfileScreenRoutingLogic, ProfileScreenDat
     weak var viewController: ProfileScreenViewController?
     var dataStore: ProfileScreenDataStore?
     
-    // MARK: Routing
-    
-    //func routeToSomewhere(segue: UIStoryboardSegue?) {
-    //  if let segue = segue {
-    //    let destinationVC = segue.destination as! SomewhereViewController
-    //    var destinationDS = destinationVC.router!.dataStore!
-    //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-    //  } else {
-    //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-    //    var destinationDS = destinationVC.router!.dataStore!
-    //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-    //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-    //  }
-    //}
-    
     //MARK: Navigation
     
     func navigateToSingInViewController(source: ProfileScreenViewController, destination: SignInWithAppleViewController) {
-      source.show(destination, sender: nil)
+        source.show(destination, sender: nil)
     }
-    func navigateToFillDataViewController(source: ProfileScreenViewController, destination: BecomeMentorViewController) {
-      source.show(destination, sender: nil)
+    func navigateToFillDataViewController(source: ProfileScreenViewController, destination: FillDataViewController) {
+        source.show(destination, sender: nil)
     }
-    func navigateToEditDataViewController(source: ProfileScreenViewController, destination: BecomeMentorViewController, withData: ProfileScreen.loadYourDataa.ViewModel) {
-        destination.isBackButtonHidden = false
-        destination.isItDataEditingScreen = true
+    func navigateToEditDataViewController(source: ProfileScreenViewController, destination: FillDataViewController, withData: ProfileScreen.loadYourDataa.ViewModel) {
+       
         guard var detailDS = destination.router?.dataStore else {return}
-        passDataToSomewhere(source: withData, destination: &detailDS)
+        passDataToEditDataScreen(source: withData, destination: &detailDS)
         destination.isBackButtonHidden = false
         destination.isItDataEditingScreen = true
-    source.show(destination, sender: nil)
-}
+        source.show(destination, sender: nil)
+    }
+    func navigateToStatisticsScreen(source: ProfileScreenViewController, destination: StatisticsViewController){
+        source.show(destination, sender: nil)
+    }
     // MARK: Passing data
-    
-    func passDataToSomewhere(source: ProfileScreen.loadYourDataa.ViewModel, destination: inout BecomeMentorDataStore) {
+    func passDataToEditDataScreen(source: ProfileScreen.loadYourDataa.ViewModel, destination: inout FillDataDataStore) {
         destination.name = source.name
         destination.languages = source.languages
         destination.shortDiscription = source.shortDiscription

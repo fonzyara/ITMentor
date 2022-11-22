@@ -12,18 +12,18 @@
 
 import UIKit
 
-@objc protocol BecomeMentorRoutingLogic {
-    func navigateToSomewhere(source: BecomeMentorViewController, destination: SelectLanguagesViewController)
+@objc protocol FillDataRoutingLogic {
+    func navigateToSomewhere(source: FillDataViewController, destination: SelectLanguagesViewController)
 }
 
-protocol BecomeMentorDataPassing {
-    var dataStore: BecomeMentorDataStore? { get }
+protocol FillDataDataPassing {
+    var dataStore: FillDataDataStore? { get }
 }
 
-class BecomeMentorRouter: NSObject, BecomeMentorRoutingLogic, BecomeMentorDataPassing {
+class FillDataRouter: NSObject, FillDataRoutingLogic, FillDataDataPassing {
     
-    weak var viewController: BecomeMentorViewController?
-    var dataStore: BecomeMentorDataStore?
+    weak var viewController: FillDataViewController?
+    var dataStore: FillDataDataStore?
     
     // MARK: Routing
     
@@ -43,13 +43,13 @@ class BecomeMentorRouter: NSObject, BecomeMentorRoutingLogic, BecomeMentorDataPa
     
     // MARK: Navigation
     
-    func navigateToSomewhere(source: BecomeMentorViewController, destination: SelectLanguagesViewController) {
+    func navigateToSomewhere(source: FillDataViewController, destination: SelectLanguagesViewController) {
       source.show(destination, sender: nil)
     }
     
     // MARK: Passing data
     
-    //func passDataToSomewhere(source: BecomeMentorDataStore, destination: inout SomewhereDataStore) {
+    //func passDataToSomewhere(source: FillDataDataStore, destination: inout SomewhereDataStore) {
     //  destination.name = source.name
     //}
 }

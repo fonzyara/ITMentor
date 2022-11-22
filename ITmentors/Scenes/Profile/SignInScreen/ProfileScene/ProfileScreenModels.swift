@@ -31,7 +31,7 @@ enum ProfileScreen {
             var name: String?
             var discription: String?
             var imageData: Data?
-            var languages: [Languages] = []
+            var languages: [Language] = []
             var messageLink: String?
             var shortDiscription: String?
             var isMentoring: Bool?
@@ -41,7 +41,7 @@ enum ProfileScreen {
             var name: String?
             var discription: String?
             var imageData: Data?
-            var languages: [Languages] = []
+            var languages: [Language] = []
             var messageLink: String?
             var shortDiscription: String?
             var isMentoring: Bool?

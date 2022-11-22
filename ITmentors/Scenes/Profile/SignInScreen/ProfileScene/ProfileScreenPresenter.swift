@@ -43,7 +43,7 @@ class ProfileScreenPresenter: ProfileScreenPresentationLogic {
             viewModel = ProfileScreen.chekcAuthAndDataFill.ViewModel(viewControllerWeNeedToShow: SignInWithAppleViewController())
         }
         else if response.isYourInfoFilled == false {
-            viewModel = ProfileScreen.chekcAuthAndDataFill.ViewModel(viewControllerWeNeedToShow: BecomeMentorViewController())
+            viewModel = ProfileScreen.chekcAuthAndDataFill.ViewModel(viewControllerWeNeedToShow: FillDataViewController())
         }
         viewController?.showAuthOrFillInfoScreen(viewModel: viewModel)
     }

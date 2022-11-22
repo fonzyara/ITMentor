@@ -1,20 +1,20 @@
 //
-//  BecomeMentorConfigerator.swift
+//  FillDataConfigerator.swift
 //  ITmentors
 //
 //  Created by Vladimir Alecseev on 03.10.2022.
 //
 
 import Foundation
-class BecomeMentorConfigurator {
-    static let shared = BecomeMentorConfigurator()
+class FillDataConfigurator {
+    static let shared = FillDataConfigurator()
     
     private init() {}
     
-    func configure(with viewController: BecomeMentorViewController) {
-        let interactor = BecomeMentorInteractor()
-        let presenter = BecomeMentorPresenter()
-        let router = BecomeMentorRouter()
+    func configure(with viewController: FillDataViewController) {
+        let interactor = FillDataInteractor()
+        let presenter = FillDataPresenter()
+        let router = FillDataRouter()
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter

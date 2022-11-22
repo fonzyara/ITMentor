@@ -24,56 +24,51 @@ class MentorCell: UITableViewCell, CellModelRepresentable {
         }
     }
     
-    var arrayOfLanguages: [Languages] = []
+    private var arrayOfLanguages: [Language] = []
     
     private func updateViews() {
-        guard let cellModel = cellModel as? MentorsScreen.ShowMentorCells.ViewModel.MentorCellViewModel else { return
-            
-        }
+        guard let cellModel = cellModel as? MentorsScreen.ShowMentorCells.ViewModel.MentorCellViewModel else { return }
         
-        self.arrayOfLanguages = cellModel.languages
+        arrayOfLanguages = cellModel.languages
         nameLabel.text = cellModel.name
         discriptionLabel.text = cellModel.shortDiscription
         mentorImageView.image = UIImage(data: cellModel.imageData ?? Data())
-        //        print("llll")
+        
+        backgroundColor = .AppPalette.secondElementColor
+
         addSubviews()
         addConstraints()
     }
     
     
     
-    let mentorImageView: UIImageView = {
+    private let mentorImageView: UIImageView = {
         let iv = UIImageView()
-        //        iv.layer.cornerRadius = mentorImageView.frame.size.width / 2
         iv.layer.masksToBounds = true
         iv.image = UIImage()
         iv.layer.cornerRadius = 40
-        iv.backgroundColor = .red
-        iv.layer.borderColor = UIColor.AppPalette.backgroundColor.cgColor
+        iv.layer.borderColor = UIColor.AppPalette.thirdElementColor.cgColor
         iv.layer.borderWidth = 2
+        iv.isUserInteractionEnabled = false
         return iv
     }()
-    let discriptionLabel: UILabel = {
+    private let discriptionLabel: UILabel = {
         let l = UILabel()
         l.textColor = .gray
-//        l.textAlignment = .left
         l.numberOfLines = 0
         l.lineBreakMode = .byWordWrapping
-//        l.text = "sdfsdf sdfsdf sf sdfsdf sfds df sdf sdf sdfs efwrwerw  werwe rwerrwerw rw erw er we sdfse rf esdfs efw erw ezddc sewerf wsdfse scds e"
         l.adjustsFontSizeToFitWidth = true
         l.minimumScaleFactor = 0.5
-//        l.font = UIFont.systemFont(ofSize: 15)
-        
         return l
     }()
-    let nameLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let l = UILabel()
         l.textColor = .white
         l.textAlignment = .left
         l.font = UIFont.boldSystemFont(ofSize: 30)
         return l
     }()
-    let collectionViewOfLanguages: UICollectionView = {
+    private let collectionViewOfLanguages: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 6
@@ -82,9 +77,9 @@ class MentorCell: UITableViewCell, CellModelRepresentable {
         collectionView.showsHorizontalScrollIndicator = false
        return collectionView
     }()
-    let goToMentorDetailesScreenButton: UIButton = {
+    private let goToMentorDetailesScreenButton: UIButton = {
         let b = UIButton()
-        b.setImage(UIImage(systemName: "chevron.right")?.withTintColor(.white), for: .normal)
+        b.setImage(UIImage(systemName: "chevron.right")?.withTintColor(.AppPalette.thirdElementColor, renderingMode: .alwaysOriginal), for: .normal)
         b.addTarget(self, action: #selector(goToMentorDetailesScreen), for: .touchUpInside)
        return b
     }()
@@ -157,7 +152,7 @@ extension MentorCell: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LanguageCell", for: indexPath) as! LanguageCollectionViewCell
-        cell.update(language: arrayOfLanguages[indexPath.row])
+        cell.setup(language: arrayOfLanguages[indexPath.row])
 
         return cell
     }
@@ -168,12 +163,7 @@ extension MentorCell: UICollectionViewDataSource {
 extension MentorCell: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row + 1)
-        
-        //    let newVC = ArticleViewController()
-        //    let lala = NavigationMenuBaseController()
-        //        newVC.navigationController?.popToRootViewController(animated: true)
-        //    newVC.navigationController?.popViewController(animated: true)
+      goToMentorDetailesScreen()
     }
 
 }

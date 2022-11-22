@@ -21,7 +21,7 @@ struct MentorCellModel{
     let discription: String?
     let shortDiscription: String?
     let imageData: Data?
-    let languages: [Languages]
+    let languages: [Language]
     let messageLink: String?
     let ShortUUID: String?
 
@@ -44,7 +44,7 @@ enum MentorsScreen {
                 let name: String?
                 let discription: String?
                 let imageData: Data?
-                let languages: [Languages]
+                let languages: [Language]
                 let messageLink: String?
                 let shortDiscription: String?
                 let ShortUUID: String?
